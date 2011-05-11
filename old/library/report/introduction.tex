@@ -1,0 +1,99 @@
+\chapter{Introduction}
+Within the field of Artificial Intelligence (AI), the focus lies at designing
+and building rational agents, where an agent differs from most programs in at
+least the fact that they operate autonomously \cite[p.4]{Russel2003}.  This
+science hasn't developed enough to design autonomous applications that can be
+used in all situations.  Even within the AI community there is debate whether
+``AI-complete'' problems \cite[p.738]{Jurafsky2000}, like the above problem
+class very well might be,  would ever be solved.  To make optimal use of the
+currently developed techniques, researchers are looking at the best way of
+putting a human on the spot of an autonomous agent.  One of these fields of
+research is telepresence\index{telepresence}.  Telepresence focuses on converting sensor data to
+corresponding human experiences and letting the human act upon this remote
+environment.  Examples of telepresence systems include telephones and video
+conference systems. One could also think of remotely operated robots.  This is
+called remote robot presence\index{remote robot presence}, and lies at
+the intersection of the fields of telepresence and human robot
+interaction\index{human robot interaction}
+(HRI\index{HRI|see{human robot interaction}}).
+
+There are many cases in which robots can be used. They are regularly
+sumarrised by ``the 3 D's: jobs that are dirty, dull or dangerous''
+\cite[p.6]{Murphy2000}\index{3 D's}.  A fourth class of tasks in which robotics is often
+applied, are those involving areas which are otherwise inaccessible. This last
+class is one of the classical areas in which telepresence is applied.  But it
+is also interesting to look at designing telepresence systems for dirty
+and dangerous jobs, as it could increase the comfort of the human operator.
+
+Throughout the years, the role of the human has moved from robot operator,
+having full control over the robot, to someone who monitors the status of the
+robot and gives high-level instructions \cite{VanErp2006}.  It is shown that
+fully automating tasks does not always ensure better system performance
+\cite{VanErp2000}, which is an argument for keeping the human in the operating
+position.
+
+Telepresence lets the user experience a remote environment and act upon it.
+One way of reaching this, is raising the situation awareness of the human
+operator \cite{Endsley1988,VanErp2006}.  Even though it has been demonstrated
+that the sense of touch, or haptic sense, is accurate and fast
+\cite{Klatzky1985}, it is often not used in telepresence systems.  
+
+%Drury et al. present a framework for understanding awareness in HRI
+%\cite{Drury2003}.  They discuss that HRI, and thus also remote robot presence,
+%can be seen as a specialised form of of computer-supported cooperative work,
+%also known as groupware \cite{Greif1988}.  They decide on expanding their
+%current definition of awareness \cite{Drury2001} 
+
+Most human senses consist of multimodal input. For example, vision is composed
+of properties describing color and light intensity.  The haptic sense has been
+broken down into seven properties: texture, hardness, temperature, weight,
+volume, global shape and exact shape.  Humans investigate each of these
+properties with stereotypical hand movements, called ``exploratory
+procedures'' \cite{Lederman1993}.  In a remote robot presence system, one
+could implement all of these, but it might be preferable to shield off the
+user of some of these properties, like temperature.  Other properties, like
+hardness, volume and shape, are very useful when represented with little to no
+modification to the human operator.  
+
+For this to be useful to the operator, it is important that the sensors that
+gather the haptic data should interfere as little as possible with the work of
+the operator.  When the operator has to aim its sensor at his tools manually,
+the correct usage of the system will be tedious.  One could choose for several
+designs to overcome this problem.  In the first place, the haptic feedback can
+be left out, with the obvious drawback of not getting any additional
+information conveyed to the operator.  As another option, the system could be
+designed with only short ranged sensors, such as touch sensors, which are
+mounted on or near the tool.  But sometimes one needs to generate feedback
+before the inspected object is touched.  Other solutions, like using
+gyroscopes or accelerometers, can be used only in very specific cases.  
+
+Laser range sensors offer a good heuristic solution.  We assume that most
+objects that are detected by laser range sensors, generate some form of haptic
+feedback, and that most objects that we can touch, can be recognized by the
+sensor.  Because of the size and fragility of current laser range scanners,
+it is uncommon that they are mounted on a robot's tool.  For this, there
+should be movement limits be imposed, so the tools, when used, should be in
+the plane that is scanned by the laser range scanner.
+
+
+\section{Research question}
+We have investigated how to characterize the movement restraints of end
+effectors, so that they move in a plane relative to another end effector.  We
+have solved this problem for the Nao robot\cite{NaoSpec} using geometric
+algebra.  Even though we have solved this for this specific platform, it
+should be a general solution, which should be applicable to all robots with a
+pure revolute kinematic chain between the end effector that should be moved,
+and the laser range scanner.
+
+
+\section{Document structure}
+The document is set up as follows. In Chapter \ref{ch:theory} we build the
+theoretical knowledge to come to the solution. Section \ref{sec:robotics}
+gives an introduction to the terms used in robotics.  In Section
+\ref{sec:kinematics} we introduce the reader to forward and inverse
+kinematics, the framework which describes movement for a broad class of
+robots.  In Chapter \ref{sec:GA} we describe conformal geometric algebra, and
+its advantage over homogeneous models of Euclidean space.  Chapter
+\ref{ch:results} describes the algorithm we have used and extended.  In
+Chapter \ref{ch:conclusion} we discuss the quality of our solution, and give a
+reflection on our approach and a discussion of future work.

@@ -1,0 +1,152 @@
+\documentclass[a4paper,11pt,twoside,openright]{book}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{color}
+\usepackage{eufrak} % Enables \mathfrak
+\usepackage{fancyhdr} % For the page headers
+%\usepackage[margin=3cm]{geometry}
+\usepackage{hyperref} % Including links
+\usepackage{graphicx} % Including images
+\usepackage{makeidx} % Makes an index at the end
+\usepackage{sectsty} % Makes changing \chapter, \section, etc. easier
+
+\usepackage{eso-pic} % For ``DRAFT'' and UvA beeldmerk background
+\usepackage{type1cm} % For ``DRAFT'' and UvA beeldmerk background
+
+\usepackage{ifthen}
+
+%%% Initializing packaged
+\pagestyle{fancy}
+
+\definecolor{blueish}{rgb}{0, 0.28, 0.74}
+\definecolor{nicered}{rgb}{0.6, 0.0, 0.24}
+\definecolor{nicegreen}{rgb}{0.0, 0.5, 0.24}
+\definecolor{niceblue}{rgb}{0.0, 0.4, 1.0}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=nicegreen,
+  linkcolor=blueish,
+  citecolor=nicered,
+}
+
+\allsectionsfont{\color{blueish}}
+
+\makeindex
+
+%%% Variable setup
+\def\thetitle{Presenting haptic feedback from laser range sensor data to an
+operator of a humanoid robot} % FIXME betere titel
+\def\theauthor{\href{mailto:pkok@science.uva.nl}{\color{black}Patrick de Kok}}
+\def\isdraft{true}
+%\def\isdraft{false}
+
+%%% Adding own commands, renew old ones
+\renewcommand{\familydefault}{\sfdefault}
+\ifthenelse{\equal{\isdraft}{true}}{
+  \newcommand{\comment}[1]{\colorbox{red}{\bfseries\color{white}#1}}
+  \newcommand{\TODO}[1]{\colorbox{blueish}{\bfseries\color{white}TODO: #1}}}
+  {
+  \newcommand{\comment}[1]{}
+  \newcommand{\TODO}[1]{}}
+
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+
+% Headers herdefini\"eren
+\fancyhead{}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\fancyfoot{}
+\fancyfoot[LE,RO]{\thepage}
+\fancypagestyle{plain}{%
+  \fancyhead{}%
+  \fancyfoot{}%
+  \fancyfoot[LE,RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}}
+%\fancyhead[LE]{\textsc{\theauthor}}
+%\fancyhead[RO]{\textsc{\thetitle}}
+
+%opening
+%document:
+\begin{document}
+\frontmatter
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \AddToShipoutPicture*{\AtPageCenter{%
+      \makebox(0,0){\includegraphics[height=\paperheight]{beeldmerk}}%
+      \ifthenelse{\equal{\isdraft}{true}}{%
+          \makebox(0,0){\rotatebox{45}{%
+              \textcolor[gray]{0.75}{\fontsize{6cm}{6cm}\selectfont{DRAFT}}}}%
+          \makebox(100,-300){\rotatebox{45}{%
+              \textcolor[gray]{0.75}{\fontsize{2cm}{2cm}\selectfont{\today}}}}}
+      }}
+
+    \vspace*{1.5cm}
+    {\noindent \Huge\textbf{\color{blueish} \thetitle}}
+
+    \vspace*{0.2cm}
+    {\noindent \LARGE\textbf{Bachelor thesis} (\textit{Afstudeerscriptie})}
+
+    \vspace*{3cm}
+    \noindent 
+    \Large \begin{tabular}{ll}
+    {\LARGE\textbf{Author}} &
+    {\LARGE\textbf{Patrick de Kok}}\\
+    &
+    \texttt{\href{mailto:pkok@science.uva.nl}{\color{black}pkok@science.uva.nl}}\\
+    \vspace*{0.25cm}\\
+    \textbf{Supervisor} &
+     \textbf{Arnoud Visser}\\
+    &
+    \texttt{\href{mailto:arnoud@science.uva.nl}{\color{black}arnoud@science.uva.nl}}\\
+
+    \vspace*{0.25cm}\\
+    \end{tabular}
+
+
+    \vfill
+    \noindent Submitted in partial fulfillment for a Bachelor's degree in
+    \textbf{\mbox{Kunstmatige Intelligentie}} at the \textbf{\mbox{Universiteit van
+    Amsterdam}}
+    \begin{center}
+      \includegraphics{uva_logo}
+    \end{center}
+  \end{titlepage}
+
+\ifthenelse{\equal{\isdraft}{true}}{
+  \AddToShipoutPicture{\AtPageCenter{%
+    \makebox(0,0){\rotatebox{45}{%
+      \textcolor[rgb]{1, 0.8, 0.8}{\fontsize{6cm}{6cm}\selectfont{DRAFT}}}}%
+    \makebox(100,-300){\rotatebox{45}{%
+      \textcolor[rgb]{1, 0.8, 0.8}{\fontsize{2cm}{2cm}\selectfont{\today}}}}}}}
+
+\include{abstract}
+
+\tableofcontents
+
+\mainmatter
+\include{introduction}
+\include{theory}
+%\include{experiments}
+\include{results}
+\include{conclusion}
+
+\appendix
+
+\backmatter
+\cleardoublepage
+\bibliographystyle{alpha}
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{../library,../literature}
+
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{Index}
+%\printindex
+
+\end{document}

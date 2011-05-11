@@ -1,0 +1,188 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[british]{babel}
+\usepackage{color}
+\definecolor{nicered}{rgb}{0.6, 0.0, 0.24}
+\definecolor{nicegreen}{rgb}{0.0, 0.5, 0.24}
+\definecolor{niceblue}{rgb}{0.0, 0.4, 1.0}
+\usepackage[colorlinks=true,urlcolor=nicered,linkcolor=nicegreen,citecolor=niceblue]{hyperref}
+\usepackage{multicol}
+\usepackage{multirow}
+
+\renewcommand{\familydefault}{\sfdefault}
+\newcommand{\help}[1]{\textbf{\color{red}#1}}
+
+\author{\href{mailto:pkok@science.uva.nl}{Patrick de Kok}}
+\title{Methoden van AI onderzoek -- opdracht 5 \& 6}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+In this document I give a view of my observations within the field of
+Artificial Intelligence focused on using a human operator in robot control,
+extending this field to the field of telepresence. Following from that, I will
+state the research question for my Bachelor thesis and the results I expect
+from this. Finally, I will present the schedule I will try to follow.
+\end{abstract}
+
+\begin{multicols}{2}
+\section{Introduction}
+Within the field of Artificial Intelligence (AI), the focus lies at designing
+and building rational agents, where an agent differs from most programs in at
+least the fact that they operate autonomously \cite[p.4]{Russel2003}.  This
+science hasn't developed enough to design autonomous applications that can be
+used in all situations.  Even within the AI community there is debate whether
+these ``AI-complete'' problems \cite[p.738]{Jurafsky2000} would ever be
+solved.  To make optimal use of the currently developed techniques,
+researchers are looking at the best way of putting a human on the spot of an
+autonomous agent.  One of these fields of research is telepresence.
+Telepresence focuses on converting sensor data to corresponding human
+experiences and letting the human act upon this remote environment.  Examples
+of telepresence systems include telephones and video conference systems. One
+could also think of remotely operated robots.  This is called remote robot
+presence, and lies at the intersection of the fields of telepresence and human
+robot interaction (HRI).
+
+There are many cases in which robots can be used. They are regularly
+sumarrised by ``the 3 D's: jobs that are dirty, dull or dangerous''
+\cite[p.6]{Murphy2000}.  A fourth class of tasks in which robotics is often
+applied, are those involving areas which are otherwise inaccessible. This last
+class is one of the classical areas in which telepresence is applied.  But it
+is also interesting to look at designing telepresence systems for dirty
+and dangerous jobs, as it could increase the comfort of the human operator.
+
+Throughout the years, the role of the human has moved from robot operator,
+having full control over the robot, to someone who monitors the status of the
+robot and gives high-level instructions \cite{VanErp2006}.  It is shown that
+fully automating tasks does not always ensure better system performance
+\cite{VanErp2000}, which is an argument for keeping the human in the operating
+position.
+
+Telepresence lets the user experience a remote environment and act upon it.
+One way of reaching this, is raising the situation awareness of the human
+operator \cite{Endsley1988,VanErp2006}.  Even though it has been demonstrated
+that the sense of touch, or haptic sense, is accurate and fast
+\cite{Klatzky1985}, it is often not used in telepresence systems.  
+
+%Drury et al. present a framework for understanding awareness in HRI
+%\cite{Drury2003}.  They discuss that HRI, and thus also remote robot presence,
+%can be seen as a specialised form of of computer-supported cooperative work,
+%also known as groupware \cite{Greif1988}.  They decide on expanding their
+%current definition of awareness \cite{Drury2001} 
+
+Most human senses consist of multimodal input. For example, vision is composed
+of properties describing color and light intensity.  The haptic sense has been
+broken down into seven properties: texture, hardness, temperature, weight,
+volume, global shape and exact shape.  Humans investigate each of these
+properties with stereotypical hand movements, called ``exploratory
+procedures'' \cite{Lederman1993}.  In a remote robot presence system, one
+could implement all of these, but it might be preferable to shield off the
+user of some of these properties, like temperature.  Other properties, like
+hardness, volume and shape, are very useful when represented with little to no
+modification to the human operator.  
+
+\section{Research question}
+For my Bachelor thesis I will investigate the following question:
+\begin{quote}
+How do you create a haptic model of the environment with optical range sensors
+and act upon it from another point of view?
+\end{quote}
+
+This question can be broken down into several parts.  First, the system needs
+to acquire a haptic model of the environment.  To capture each of the
+properties by means of optical range sensors might be difficult.  The volume
+and shape properties can be obtained by scanning the area with a 2D laser
+scanner (see for example \cite{Curless1996,Chen1996}).  Temperature can be seen by infrared cameras.
+One can experiment with computer vision techniques to obtain some heuristic
+information on the other haptic properties (texture, hardness and weight).
+
+\section{Expected results}
+
+The hardware specifications I am to use give restrictions on the possible
+input and output methods.
+
+The robot which will act upon the, for the human remote, environment will be a
+Nao \cite{NaoSpec} with a laser scanner mounted on top of its head.  
+Nao is a humanoid robot. It is equipped with two CMOS cameras by default,
+which might be an aid in discovering haptic properties.   It also has a 2 
+channel sonar.  Besides these, it can connect via Wi-Fi 802.11b or an 
+ethernet cable to a network, running an internal server by which a computer 
+can communicate with the robot.  
+
+I will use two Novint Falcons for the human input and haptic output of the
+system \cite{NovintFalconSpec}.  The Novint Falcon has three robotic arms, each
+with 3 degrees of freedom. The three arms hold a sphere with buttons on it.
+This is the human handle.  It generates force feedback on the sphere by
+varying the tension on the arms' motors.  It does not have a module
+to control temperature.  Because I cannot test how well this correspond to the
+human experience, I will not try to work with this haptic property.  Each
+Novint Falcon will control one arm of the Nao.  
+
+I expect that recognizing the arms of the robot as not being a haptic barrier
+to be one of the problems in a setting where the model is updated dynamically.
+I expect that I have this problem solved at the end of the project.  I do not
+expect to have designed or implemented heuristics for extracting haptic
+properties from visual images.
+
+\section{Schedule}
+\begin{table*}
+\caption{A more structured representation of my working schedule for getting
+my Bachelor thesis finished. \label{tab:schedule}}
+\begin{tabular}{rlr}
+Week number & Activity description & Hours \\
+\hline
+14 & Generating 3D model from 2D data & $\frac{1}{4}d$\\
+15 & Generating 3D model from 2D data & $\frac{1}{4}d$\\
+16 & Generating 3D model from 2D data & $\frac{1}{4}d$\\
+17 & From 3D model to haptic model & $\frac{1}{4}d$\\
+18 & Study trip to England & 0\\
+19 & Inverse kinematics and arm control & $\frac{1}{4}d$\\
+20 & Inverse kinematics and arm control & $\frac{1}{4}d$\\
+21 & Examination period & 0\\
+22 & Moving arms with feedback in line with head & $d$\\
+23 & Moving arms with feedback in line with head & $d$\\
+24 & Extending to full 3D, 2 arms & $d$\\
+25 & Final presentation& $d$\\
+26 & Extending to full 3D, 2 arms & $d$\\
+27 & Extending to full 3D, 2 arms & $d$\\
+28 & Write report & $d$\\
+29 & Write report & $d$\\
+\end{tabular}
+\end{table*}
+
+In the first three weeks, I expect to be busy reading up on techniques that
+generate a 3D model from 2D data.  As most tangible objects have a reflection
+and reflecting objects are tangible, it might be sufficient to take this model
+as the one for the haptic volume and shape properties.  To be sure, I take one
+week for this.
+
+In the two weeks after that, I will have to make the module which controls the
+robot arms.  I could only find a description of the inverse kinematics of
+Nao's legs \cite{BHuman2009}, which means I have to calculate the inverse
+kinematics of its arms and head myself.  When finished with that, I will have
+the head follow one of the hands in such a way that the laser scanner is just
+a bit ahead of the hand.
+
+After the examination period, I will work on scanning the area just in front
+of the hand and generating a haptic model of that.  In the last week before the
+final presentation, I will start developing a method for moving both arms with
+haptic feedback, and having the head move independently from the arms.  I will
+continue working on this in my honours time, after the final presentation.
+
+In the final two weeks I will write my report.
+
+When I have time left, I will work on making a module that heuristically adds 
+additional haptic properties to the model based on computer vision techniques.
+
+The schedule is given in a more structured way in \autoref{tab:schedule}.  In
+the first column are the week numbers. In the second column one can find the
+activity I will undertake for my thesis in that week.  In the last column you
+can see the time I think I will spend that week on my thesis.  During VIA's
+study trip to England and the examination period I expect to do nothing
+noteworthy.  In the weeks after the examination period, I expect to work
+full-time ($d$ hours) on this project. In the weeks before, I work one-fourth
+of full-time, as that is the time rostered for this project.
+
+\bibliographystyle{alpha}
+\bibliography{../library,../literature}
+\end{multicols}
+\end{document}

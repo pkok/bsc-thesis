@@ -1,0 +1,199 @@
+\chapter{Background Theory} % FIXME of Background Information/Terminology?
+\label{ch:theory}
+
+In this chapter, we will introduce a mathematical framework for robot
+movement.  To do this, we will first introduce some common concepts in
+robotics.  We assume that the reader has a basic understanding of linear
+algebra.
+
+\section{Robotics terminology}
+\label{sec:robotics}
+\comment{Defini\"eren wat een robot is? Met onderstaande ben ik het niet eens,
+denk ik}
+
+Robots are physical agents that performs tasks by manipulating the physical
+world \cite[p.901]{Russel2003}.  A robot's body consists of
+\emph{links}\index{link} which are connected with each other through
+\emph{joints}\index{joint}.  For the discussion in this document we assume all
+links to be \emph{rigid bodies}\index{rigid body}; physical objects that
+cannot be deformed.  A link's position can change with respect to another link
+through change in its joint.  It can either revolve around a point, or it can
+be moved some distance.  Joints that enable the first type of change are called
+\emph{revolute}\index{joint!revolute}, the second class is called a
+\emph{prismatic joint}\index{joint!prismatic}.  We count 1 \emph{degree of
+freedom}\index{degree of freedom} (DOF\index{DOF}) for each transformation a
+joint can exercise on a link.  Joints with a DOF greater than 1 are said to be
+composite, and can be represented by multiple joints that are connected to
+each other by links with no length.  
+
+Links are thus connected to other links by joints.  When considering 
+links and joints that connect to each other as a whole, we speak of a
+\emph{kinematic chain}\index{kinematic chain}.  Kinematic chains can be
+\emph{closed}\index{kinematic chain!closed}; it can contain a loop, where a
+link is connected to another link that is already in the chain.  When there
+are no loops, the kinematic chain is \emph{open}\index{kinematic chain!open}.
+
+Because of its links and joints, the robot can affect the world.  The parts of
+its body that do so, are called \emph{effectors}\index{effector}.  The parts
+at the very end of an (open) kinematic chain are called \emph{end
+effectors}\index{effector!end}.
+
+\comment{Links hebben een co\"ordinatenstelsel, niet joints toch?}
+
+It often is more convenient to know where an object is relative to a link,
+than knowing where the link and the object are in the world coordinate system.
+Because of this we define a \emph{frame}\index{frame}, or basis, $\mathfrak{B}_i$ for
+each link $l_i$.  The basis is usually orthogonal.  The origin of the basis is
+defined relative to its corresponding link.  We will use
+$[\mathbf{p}]_{\mathfrak{B}}$ to denote a vector that represents a point $p$
+in the basis $\mathfrak{B}$.  As a shorthand for
+$[\mathbf{p}]_\mathfrak{W}$, a vector representing a point $p$ in the basis of
+the world, we write $\mathbf{p}$.
+
+As rigid bodies cannot be deformed, they can only undergo operations that are
+\emph{isometric}\index{isometry}.  A matrix $A$ is said to be isometric when
+the length of a vector is preserved after applying $A$ to it.  Each isometry
+in a Euclidean space can be decomposed by a rotation (or a special orthogonal
+transformation), a translation and a reflection.  As a physical object cannot
+reflect its body in the real world, we will not further discuss those
+isometries that reflect points in a certain plane.
+
+\TODO{Decompositiestelling kort behandelen}
+
+\TODO{Stelling ``2 spiegelingen maken 1 rotatie'' bespreken}
+
+\TODO{Denavit-Hartenberg bespreken!}
+
+\comment{Verhaal verduidelijken aan de hand van een plaatje?}
+
+\section{Forward and inverse kinematics}
+\label{sec:kinematics}
+Forward and inverse kinematics form a framework for working with robot joint
+configurations and their positions.  In the following discussion we have
+assumed all kinematic chains to be open.
+
+\index{forward kinematics|see{kinematics, forward}}
+\index{kinematics!forward|(}
+Forward kinematics is used to compute the position and orientation of a link
+with respect to some basis $\mathfrak{B}$, given the configuration of the
+joints in the kinematic chain\index{kinematic chain}.  
+
+Each link $l_i$ in the kinematic chain has its own coordinate system
+$\mathfrak{B}_i$. One can express a point $\mathbf{p} = \left[p_x, p_y,
+p_z\right]^T$ in one coordinate system $\mathfrak{B}_i$ in a different
+coordinate system $\mathfrak{B}_j$ when the rotation $\theta_i$ and
+translation $\mathbf{d}_i = \left[t_x, t_y, t_z\right]^T$ is given.  As known, a
+rotation over an angle $\theta_i$ on $\mathbf{p}$ is a linear operation and can
+be represented by the matrix:
+
+\comment{2D $R(\theta)$ kan niet op 3D $\mathbf{p}$ toegepast worden!}
+\begin{equation*}
+R(\theta_i) = 
+\begin{bmatrix}
+\cos\theta_i & -\sin\theta_i\\
+\sin\theta_i & \cos\theta_i
+\end{bmatrix}
+\end{equation*}
+This is just a simple rotation in 2 dimensional space. We need a rotation in 3
+dimensional space.  For this, one can use either $R_x$, $R_y$ or $R_z$ for a
+rotation over one of three axes:
+\comment{Waarom zou ik eigenlijk een 2D-rotatie behandelen...}
+\begin{eqnarray*}
+R_x(\theta_i) &=&
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & \cos\theta_i & -\sin\theta_i \\
+0 & \sin\theta_i & \cos\theta_i
+\end{bmatrix} \\
+%
+R_y(\theta_i) &=&
+\begin{bmatrix}
+\cos\theta_i & 0 & \sin\theta_i \\
+0 & 1 & 0 \\
+-\sin\theta_i & 0 & \cos\theta_i
+\end{bmatrix} \\
+%
+R_z(\theta_i) &=&
+\begin{bmatrix}
+\cos\theta_i & -\sin\theta_i & 0 \\
+\sin\theta_i & \cos\theta_i & 0 \\
+0 & 0 & 1 
+\end{bmatrix}
+\end{eqnarray*}
+%
+As a comprehensive way of denoting a rotation over all three directions
+$\theta_{i,x}$, $\theta_{i,y}$ and $\theta_{i,z}$, we will write
+$R(\mathbf{\theta_i}) = R_z(\theta_{i,z}) R_y(\theta_{i,y}) R_x(\theta_{i,x})$.
+
+Translation over $\mathbf{d}_i$ is not a linear operation on $\mathbf{p}$.
+Translation over $\mathbf{d}_i$ is, however, a linear operation on $\mathbf{p}' =
+\left[p_x, p_y, p_z, 1\right]$.  This can be represented by the matrix:
+\begin{equation*}
+D(\mathbf{d}_i) = 
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\end{equation*}
+such that 
+\begin{equation*}
+D(\mathbf{d}_i) \mathbf{p}
+=
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+p_x\\
+p_y\\
+p_z\\
+1\\
+\end{bmatrix}
+= 
+\begin{bmatrix}
+p_x + t_x\\
+p_y + t_y\\
+p_z + t_z\\
+1
+\end{bmatrix}
+\end{equation*}
+This extension on our normal coordinate system is called a \emph{homogeneous
+coordinate system}\index{homogeneous coordinate system}.  When extending the
+rotation matrix $R$ to a homogeneous coordinate system,
+you get:
+\begin{equation*}
+R^H(\mathbf{\theta}_i) = 
+\begin{bmatrix}
+R(\mathbf{\theta}_i) & \mathbf{0} \\
+\mathbf{0}^T & 1
+\end{bmatrix}
+\end{equation*}
+A more general form of this matrix, in which both operations are combined can
+be given by:
+
+\begin{equation*}
+^iT_j = R^H(\mathbf{\theta}_i)D(\mathbf{d}_i) = D(\mathbf{d}_i)R^H(\mathbf{\theta}_i) =
+\begin{bmatrix}
+R(\mathbf{\theta}_i) & \mathbf{d}_i \\
+\mathbf{0}^T & 1
+\end{bmatrix}
+\end{equation*}
+
+Here $^iT_j$ denotes the homogeneous transformation from coordinate system
+$\mathfrak{B}_i$ to $\mathfrak{B}_j$.
+
+\index{kinematics!forward|)}
+
+\index{inverse kinematics|see{kinematics, inverse}}
+\index{kinematics!inverse|(}
+
+\index{kinematics!inverse|)}
+
+\comment{Alles in deze sectie hoort eigenlijk ook nog in de vorige...}
+
+\section{Geometric algebra}
+\label{sec:GA}

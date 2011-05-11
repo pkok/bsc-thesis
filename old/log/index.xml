@@ -1,0 +1,521 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+<channel>
+<title>Ranged Haptics</title>
+<description>The lab book for Patrick de Kok's BSc thesis</description>
+<language>en</language>
+<copyright>Copyright 2010 pkok</copyright>
+<pubDate>Thu, 19 Aug 2010 16:51:42 GMT</pubDate>
+<lastBuildDate>Thu, 19 Aug 2010 16:51:42 GMT</lastBuildDate>
+<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+<generator>TiddlyWiki 2.6.0</generator>
+<item>
+<title>2010-08-19</title>
+<description>Changed some architecture thingies in my code. Decided that it would be better to work with a client-server structure, so I can keep code from the kinematics separate from the &quot;display code&quot; (GAViewer, the Nao robot etc.) and that it would be more extensible for future work as a nice side effect. Finished the code for GAViewer, but still got to test it.</description>
+<category>journal</category>
+<link>#2010-08-19</link>
+<pubDate>Thu, 19 Aug 2010 16:51:39 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-24</title>
+<description>Weighted average of two &quot;flat points&quot; &lt;em&gt;x&lt;span&gt;∧&lt;/span&gt;&lt;span&gt;∞&lt;/span&gt;&lt;/em&gt; and &lt;em&gt;y&lt;span&gt;∧&lt;/span&gt;&lt;span&gt;∞&lt;/span&gt;&lt;/em&gt; is &lt;em&gt;(1 - &lt;span&gt;λ&lt;/span&gt;)(x&lt;span&gt;∧&lt;/span&gt;&lt;span&gt;∞&lt;/span&gt;) + &lt;span&gt;λ&lt;/span&gt;(y&lt;span&gt;∧&lt;/span&gt;&lt;span&gt;∞&lt;/span&gt;)&lt;/em&gt;, with &lt;em&gt;0 &lt;span&gt;≤&lt;/span&gt; &lt;span&gt;λ&lt;/span&gt; &lt;span&gt;≤&lt;/span&gt; 1&lt;/em&gt;.</description>
+<category>journal</category>
+<link>#2010-07-24</link>
+<pubDate>Sat, 24 Jul 2010 21:49:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-21</title>
+<description>I've mailed back and forth with Andreas and Joan about the error I spotted. They were very kind, and replied very quickly. It turned out that this article I've read on FABRIK is the only spot where they've made this typo. &lt;br&gt;&lt;br&gt;Currently I'm busy implementing the orientational and rotational constraints into FABRIK. Arnoud and I can't find out how to get the information on the orientation, as FABRK only uses the position of the joints. Otherwise it should be some big rewriting, probably. Maybe I should just contact Andreas again, perhaps even ask for his implementation.</description>
+<category>journal</category>
+<link>#2010-07-21</link>
+<pubDate>Wed, 21 Jul 2010 16:49:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-19</title>
+<description>Last night I got an epiphany! The problem is really easy to solve; you just have to project the target location of the effector to the plane defined by the laser. I still have to find a suitable solution for when the target lays outside the boundaries of the scanner.&lt;br&gt;&lt;hr&gt;Found the problem(s) why GAViewer entered an infinite loop. First, I wanted to set variables that are declared dynamically. Secondly, I wanted to loop backwards, but the counter increased. The algorithm doesn't work yet, though.&lt;br&gt;&lt;hr&gt;Fixed the algorithm! That is, it does something sensible for a certain target. In line 1.37 of the article of Aristidou and Lasenby, it should say &lt;strong&gt;p&lt;/strong&gt;&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;+1&lt;/sub&gt; = (1 - λ&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;&lt;/sub&gt;)&lt;strong&gt;p&lt;/strong&gt;&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;&lt;/sub&gt; + λ&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;&lt;/sub&gt;&lt;strong&gt;p&lt;/strong&gt;&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;+1&lt;/sub&gt; (&lt;strong&gt;p&lt;/strong&gt;&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;+1&lt;/sub&gt; and &lt;strong&gt;p&lt;/strong&gt;&lt;sub&gt;&lt;em&gt;i&lt;/em&gt;&lt;/sub&gt; are switched on the right hand side).&lt;br&gt;&lt;hr&gt;When you &lt;a target=&quot;_blank&quot; title=&quot;External link to http://cxiu.nl/bsc/svn/filedetails.php?repname=BSc+Project&amp;amp;path=/trunk/code/robot_model.g&amp;amp;rev=40&quot; href=&quot;http://cxiu.nl/bsc/svn/filedetails.php?repname=BSc+Project&amp;amp;path=/trunk/code/robot_model.g&amp;amp;rev=40&quot; class=&quot;externalLink&quot;&gt;robot_model.g&lt;/a&gt; in GAViewer, you can drag (CTRL + right click) the cyan dots, and the rest of the kinematic chain will follow you in real time!</description>
+<category>journal</category>
+<link>#2010-07-19</link>
+<pubDate>Mon, 19 Jul 2010 20:49:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-18</title>
+<description>Either my implementation of FABRIK in GAViewer is faulty, or GAViewer is too slow for it. It seems to freeze. It doesn't even print my check lines.&lt;br&gt;&lt;br&gt;I'm going to look into the Matlab and Java implementations of GA. I feel most for using the Matlab implementation, as it provides visualizations. The only thing is that I haven't got access to a Matlab installation from home. &lt;br&gt;&lt;hr&gt;Added some information to the introduction of the thesis, so it suits the current research question better. Edited the research question and the document setup sections.</description>
+<category>journal</category>
+<link>#2010-07-18</link>
+<pubDate>Sun, 18 Jul 2010 21:47:00 GMT</pubDate>
+
+</item>
+<item>
+<title>Space partitioning datastructures</title>
+<description>A space partitioning data structure partitions a &lt;em&gt;k&lt;/em&gt;-dimensional space, so that the complexity of retrieving points from such a space is reduced. There are several ways of doing so. The most common way is recursively splitting up the space and storing the data in a tree structure. &lt;br&gt;&lt;br&gt;For a low dimensionality, &lt;a target=&quot;_blank&quot; title=&quot;External link to  http://en.wikipedia.org/wiki/Quadtree&quot; href=&quot;%20http://en.wikipedia.org/wiki/Quadtree&quot; class=&quot;externalLink&quot;&gt;quadtrees &lt;/a&gt; (for &lt;em&gt;k = 2&lt;/em&gt;) and &lt;a target=&quot;_blank&quot; title=&quot;External link to  http://en.wikipedia.org/wiki/Octree&quot; href=&quot;%20http://en.wikipedia.org/wiki/Octree&quot; class=&quot;externalLink&quot;&gt;octrees &lt;/a&gt; (&lt;em&gt;k = 3&lt;/em&gt;) are used, because they are easy to implement. &lt;br&gt;&lt;br&gt;For higher dimensions, &lt;a target=&quot;_blank&quot; title=&quot;External link to  http://en.wikipedia.org/wiki/Kd-tree&quot; href=&quot;%20http://en.wikipedia.org/wiki/Kd-tree&quot; class=&quot;externalLink&quot;&gt;k-d trees &lt;/a&gt; are used. They have a lower space complexity for storing points, and a lower time complexity for lookup actions.</description>
+<category>other useful</category>
+<link>#%5B%5BSpace%20partitioning%20datastructures%5D%5D</link>
+<pubDate>Sun, 18 Jul 2010 21:25:00 GMT</pubDate>
+
+</item>
+<item>
+<title>MainMenu</title>
+<description>&lt;a tag=&quot;other useful&quot; class=&quot;button&quot; title=&quot;Show tiddlers tagged with 'other useful'&quot; href=&quot;javascript:;&quot;&gt;other useful&lt;/a&gt; &lt;a tag=&quot;journal&quot; class=&quot;button&quot; title=&quot;Show tiddlers tagged with 'journal'&quot; href=&quot;javascript:;&quot;&gt;journal&lt;/a&gt; &lt;a target=&quot;_blank&quot; title=&quot;External link to http://cxiu.nl/bsc/svn/&quot; href=&quot;http://cxiu.nl/bsc/svn/&quot; class=&quot;externalLink&quot;&gt;svn&lt;/a&gt;</description>
+<link>#MainMenu</link>
+<pubDate>Sun, 18 Jul 2010 21:24:00 GMT</pubDate>
+
+</item>
+<item>
+<title>Books</title>
+<description>&lt;table class=&quot;twtable&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;th&gt;Title&lt;/th&gt;&lt;th&gt;BibTeX&lt;/th&gt;&lt;th&gt;Owner&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Robot modeling and control&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:_6H9tJrS4pgJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:_6H9tJrS4pgJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Arnoud&lt;/td&gt;&lt;td&gt;In bag&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Advanced engineering mathematics&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:JwDGpwdGQ34J:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:JwDGpwdGQ34J:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Maartje&lt;/td&gt;&lt;td&gt;In pigeonhole 'vice-voorzitter'&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Geometric algebra for computer science&lt;/td&gt;&lt;td&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:nme4r5dKkV4J:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;scfhb=1&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:nme4r5dKkV4J:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;scfhb=1&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;strike&gt;Leo&lt;/strike&gt; Me&lt;/td&gt;&lt;td&gt;In bag&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td&gt;Linear algebra with applications 2e&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:QoBajOogO_sJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=1&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:QoBajOogO_sJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=1&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Me&lt;/td&gt;&lt;td&gt;In bag&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</description>
+<category>other useful</category>
+<link>#Books</link>
+<pubDate>Sun, 18 Jul 2010 21:23:00 GMT</pubDate>
+
+</item>
+<item>
+<title>Papers</title>
+<description>&lt;table class=&quot;twtable&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;th&gt;Title&lt;/th&gt;&lt;th&gt;BibTeX&lt;/th&gt;&lt;th&gt;Location&lt;/th&gt;&lt;th&gt;Read&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Inverse Kinematics: a review of existing techniques and introduction of a new fast iterative solver&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:-qBuJOLet8sJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=2&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:-qBuJOLet8sJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=2&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://www-sigproc.eng.cam.ac.uk/~aa462/publications/CUEDF-INFENG,%20TR-632.pdf&quot; href=&quot;http://www-sigproc.eng.cam.ac.uk/%7Eaa462/publications/CUEDF-INFENG,%20TR-632.pdf&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Up to Chapter 3&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Inverse Kinematics Solutions using Conformal Geometric Algebra&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:4HKq7M5_1KMJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:4HKq7M5_1KMJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://mail.google.com/a/cxiu.nl/?ui=2#inbox/129b1baca9636af8&quot; href=&quot;http://mail.google.com/a/cxiu.nl/?ui=2#inbox/129b1baca9636af8&quot; class=&quot;externalLink&quot;&gt;Mailbox&lt;/a&gt;, &lt;a target=&quot;_blank&quot; title=&quot;External link to http://www-sigproc.eng.cam.ac.uk/~aa462/publications/AGACSE_presentation.pdf&quot; href=&quot;http://www-sigproc.eng.cam.ac.uk/%7Eaa462/publications/AGACSE_presentation.pdf&quot; class=&quot;externalLink&quot;&gt;link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Completely&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Tutorial: Structure-Preserving Representation of Euclidean Motions Through Conformal Geometric Algebra&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to Tutorial: Structure-Preserving Representation of Euclidean Motions Through Conformal Geometric Algebra|http://scholar.google.nl/scholar.bib?q=info:H2Djq3AgwAMJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;Tutorial:%20Structure-Preserving%20Representation%20of%20Euclidean%20Motions%20Through%20Conformal%20Geometric%20Algebra%7Chttp://scholar.google.nl/scholar.bib?q=info:H2Djq3AgwAMJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://mail.google.com/a/cxiu.nl/?ui=2#search/leo+has%3Aattachment/1298d4cf252b42f8&quot; href=&quot;http://mail.google.com/a/cxiu.nl/?ui=2#search/leo+has%3Aattachment/1298d4cf252b42f8&quot; class=&quot;externalLink&quot;&gt;Mailbox&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Completely&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Geometric algebra: a computational framework for geometrical applications (Part 1)&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:Ghx6brK7-QgJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:Ghx6brK7-QgJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://www.science.uva.nl/~leo/clifford/dorst-mann-I.pdf&quot; href=&quot;http://www.science.uva.nl/%7Eleo/clifford/dorst-mann-I.pdf&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Completely&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Geometric algebra: a computational framework for geometrical applications (Part 2)&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:TjqBBl_LXS8J:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=1&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:TjqBBl_LXS8J:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=1&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://www.science.uva.nl/~leo/clifford/dorst-mann-II.pdf&quot; href=&quot;http://www.science.uva.nl/%7Eleo/clifford/dorst-mann-II.pdf&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;Completely&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td align=&quot;left&quot;&gt;Modeling 3D Euclidean Geometry &lt;em&gt;(part 3)&lt;/em&gt;&lt;/td&gt;&lt;td&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://scholar.google.nl/scholar.bib?q=info:lgyq7Gif_kcJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; href=&quot;http://scholar.google.nl/scholar.bib?q=info:lgyq7Gif_kcJ:scholar.google.com/&amp;amp;output=citation&amp;amp;hl=nl&amp;amp;as_sdt=2000&amp;amp;ct=citation&amp;amp;cd=0&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&lt;a target=&quot;_blank&quot; title=&quot;External link to http://www.science.uva.nl/~leo/clifford/CGA3.pdf&quot; href=&quot;http://www.science.uva.nl/%7Eleo/clifford/CGA3.pdf&quot; class=&quot;externalLink&quot;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;No&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</description>
+<category>other useful</category>
+<link>#Papers</link>
+<pubDate>Sun, 18 Jul 2010 21:23:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-15</title>
+<description>I asked Leo whether GAViewer can output text files. He's checking it with Daniel Fontijne.&lt;br&gt;Arnoud is fine with an implementation in only GAViewer, as a proof of concept. So I'll work on that for now.&lt;br&gt;Another problem that should be overcome before implementing this algorithm for &quot;real&quot; robots is that it does not output joint rotations, but new locations of the joints. That is a problem I can put in the future work section (yay!).&lt;br&gt;&lt;hr&gt;Made a graphical representation of Nao in GAViewer.</description>
+<category>journal</category>
+<link>#2010-07-15</link>
+<pubDate>Thu, 15 Jul 2010 14:48:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-14</title>
+<description>Major problem occured. It seems impossible to get an inverse of a blade in Sympy's GA implementation (&lt;a target=&quot;_blank&quot; title=&quot;External link to http://docs.sympy.org/modules/galgebra/GA/GAsympy.html&quot; href=&quot;http://docs.sympy.org/modules/galgebra/GA/GAsympy.html&quot; class=&quot;externalLink&quot;&gt;link to documentation&lt;/a&gt;). &lt;code&gt;1 / B&lt;/code&gt; gives a &lt;code&gt;TypeError: unsupported operand type(s) for /: 'int' and 'MV'&lt;/code&gt;. When multiplying &lt;code&gt;1 / B&lt;/code&gt; by &lt;code&gt;1 == B / B&lt;/code&gt;, we get &lt;code&gt;B / (B * B)&lt;/code&gt;. This results in a &lt;code&gt;TypeError: unsupported operand type(s) for /: 'Zero' and 'MV'&lt;/code&gt;, both of which are really annoying, as I haven't found any other way of computing the inverse...&lt;br&gt;&lt;hr&gt;I found one error. I used a wrong metric. &lt;code&gt;galgebra.py&lt;/code&gt; now has the right metric (I hope). Now, for &lt;code&gt;L = (e0 + e1 + 0.5 * einf)^(e0 + e2 + 0.5 * einf)&lt;/code&gt;, we get &lt;code&gt;L * L == 2&lt;/code&gt; (that is, a &lt;code&gt;MV&lt;/code&gt; which is equivalent to the &lt;code&gt;int 2&lt;/code&gt;, and &lt;code&gt;L / 2&lt;/code&gt; gives a right result (when compared to GAViewer). But still, I cannot say something like &lt;code&gt;L / (L * L)&lt;/code&gt;, or &lt;code&gt;Lsq = L * L; Lsq.expand(); print L / Lsq;&lt;/code&gt;, or even &lt;code&gt;L / L&lt;/code&gt;!&lt;br&gt;&lt;hr&gt;I'm now looking into GAViewer, and letting it read files from command line and writing others as output, to communicate with the robot framework.</description>
+<category>journal</category>
+<link>#2010-07-14</link>
+<pubDate>Wed, 14 Jul 2010 17:32:00 GMT</pubDate>
+
+</item>
+<item>
+<title>StyleSheet</title>
+<description>&lt;pre&gt;/*Bleach Theme for TiddlyWiki*/
+/*Design and CSS by Saq Imtiaz*/
+/*Version 1.0*/
+&lt;/pre&gt;&lt;pre&gt;/***
+!General
+***/
+body {
+ background: #fff;
+}
+
+#contentWrapper{
+margin: 2.5em auto;
+width:759px;
+line-height: 1.6em;
+border:1px solid #999;
+font-size: 11px;
+font-family: Lucida Grande, Tahoma, Arial, Helvetica, sans-serif;
+color: #555;height:1%;
+}
+
+.clearAll {clear:both;}
+.tagClear {clear:none;}
+&lt;/pre&gt;&lt;br&gt;&lt;pre&gt;/***
+!Header
+***/
+#header {background:#fff; border-bottom:1px solid #999;padding: 2.5em 2em 1.6em 2em; height:1%;
+ }
+
+.siteTitle {
+font-family: 'Trebuchet MS' sans-serif;
+font-weight: bold;
+font-size: 32px;
+color: #0048BD; /* #EF680E; */
+background-color: #FFF; 
+}
+
+.siteSubtitle {
+	font-size: 1.0em;
+        display:block; 
+color: #999999; margin-top:0.5em !important; margin-top:1em; margin-left:3em;
+}
+
+#topMenu { positon:relative; float:right; display:inline; margin-right:2em;}
+#topMenu br {display:none; }
+#topMenu { background: #fff; color:#000;padding: 1em 1em;}
+#topMenu a, #topMenu .tiddlyLink, #topMenu .button {margin:0 0.5em; color:#666;}
+&lt;/pre&gt;&lt;br&gt;&lt;pre&gt;/***
+!displayArea
+***/
+
+#displayArea {margin-left:1.35em; margin-right:16.3em; margin-top:0; padding-top:1em; padding-bottom:10px;}
+&lt;/pre&gt;&lt;br&gt;&lt;pre&gt;/***
+!Sidebar
+***/
+#sidebar {position:relative;float:right; line-height: 1.4em; border-left:0px solid#000; display:inline; background:#fff; right:0; 
+width: 16em;}
+
+/***
+!SidebarOptions
+***/
+#sidebarOptions {padding-left:0.5em; border-left:1px solid #999;padding-top:1em;}
+
+#sidebarOptions a {
+			color:#999;
+			text-decoration: none;}
+#sidebarOptions	a:hover, #sidebarOptions .button:active {
+			color:#333;
+			background-color: #fff;border:1px solid #fff;
+		}
+#sidebarOptions input {border:1px solid #999; width:10em;}
+
+
+
+/***
+!SidebarTabs
+***/
+#sidebarTabs {border-left:1px solid #999;}
+#sidebarTabs .tabContents {background:#fff;}
+#sidebarTabs .tabContents .tiddlyLink, #sidebarTabs .tabContents .button{color:#999;}
+#sidebarTabs .tabContents .tiddlyLink:hover,#sidebarTabs .tabContents .button:hover{color:#333;background:#fff;border:none;}
+
+#sidebarTabs .tabContents .button:hover, #sidebarTabs .tabContents .highlight, #sidebarTabs .tabContents .marked, #sidebarTabs .tabContents a.button:active{color:#333;background:#fff}
+
+.tabSelected{color:#fff; background:#999;}
+
+.tabUnselected {
+ background: #ccc;
+}
+
+ .tabSelected, .tabSelected:hover {
+ color: #fff;
+ background: #999;
+ border: solid 1px #999;
+padding-bottom:1px;
+}
+
+#sidebarTabs .tabUnselected:hover { border-bottom: none;padding-bottom:3px;color:#4F4B45}
+
+ .tabUnselected {
+ color: #999;
+ background: #eee;
+ border: solid 1px #ccc;
+padding-bottom:1px;
+}
+
+#sidebarTabs .tabUnselected { border-bottom: none;padding-bottom:3px;}
+#sidebarTabs .tabSelected{padding-bottom:3px;}
+
+
+#sidebarOptions .sliderPanel {
+	background: #fff; border:none;
+	font-size: .9em;
+}
+#sidebarOptions .sliderPanel a {font-weight:normal; }
+#sidebarOptions .sliderPanel input {border:1px solid #999;width:auto;}
+#sidebarOptions .sliderPanel .txtOptionInput {border:1px solid #999;width:9em;}
+
+#sidebarTabs .tabContents {border-right:0; border-left:0; border-bottom:1px solid#999; padding-left:4px;}
+ .listLink,#sidebarTabs .tabContents {line-height:1.5em;}
+ .listTitle {color:#666;}
+
+#sidebarTabs .tabUnselected:hover { border-bottom: none;padding-bottom:3px;color:#4F4B45}
+#sidebarTabs .txtMoreTab .tabContents {border-left:1px solid #999;}
+#sidebarTabs .txtMainTab .tabContents li a{font-weight:bold;}
+&lt;/pre&gt;&lt;br&gt;&lt;pre&gt;.title {color:#0048BD; /* #EF680E; */}
+.subtitle, .subtitle a { color: #999999; font-size: 1em;margin:0.2em; font-variant: small-caps;}
+.shadow .title{color:#999;}
+
+.selected .toolbar a {color:#999999;}
+.selected .toolbar a:hover {color:#333; background:transparent;border:1px solid #fff;}
+
+.toolbar .button:hover, .toolbar .highlight, .toolbar .marked, .toolbar a.button:active{color:#333; background:transparent;border:1px solid #fff;}
+
+* html .viewer pre {
+	margin-left: 0em;
+}
+
+* html .editor textarea, * html .editor input {
+	width: 98%;
+}
+
+		a,#sidebarOptions .sliderPanel a{
+			color:#0048BD; /* #EF680E; */
+			text-decoration: none;
+		}
+
+		a:hover,#sidebarOptions .sliderPanel a:hover {
+			color:#0048BD; /* #EF680E; */
+			background-color: #fff; 
+border-bottom:1px dotted #0048BD; /* #EF680E; */
+		}
+
+.viewer .button, .editorFooter .button{
+	color: #555;
+	border: 1px solid #0048BD; /* #EF680E; */
+}
+
+.viewer .button:hover, 
+.editorFooter .button:hover{
+	color: #fff;
+	background: #0048BD; /* #EF680E; */
+	border-color: #0048BD; /* #EF680E; */
+}
+
+.viewer .button:active, .viewer .highlight,.editorFooter .button:active, .editorFooter .highlight{color:#fff; background:#DF691B;border-color:#DF691B;}
+
+
+		#topMenu a, #topMenu .button {
+			padding: 20px 10px; border:none; font-weight:bold;
+		}
+
+		#topMenu a:link{
+			text-decoration: none;
+		}
+		
+		#topMenu a:hover, #topMenu .button:hover {
+			background-color: #fff;
+			color:#0048BD; /* #EF680E; */
+border:none;
+		}
+
+
+
+
+
+.tagging, .tagged {
+	border: 1px solid #eee;
+	background-color: #F7F7F7;
+}
+
+.selected .tagging, .selected .tagged {
+	background-color: #eee;
+	border: 1px solid #BFBAB3;
+}
+
+ .tagging .listTitle, .tagged .listTitle {
+	color: #bbb;
+}
+
+.selected .tagging .listTitle, .selected .tagged .listTitle {
+	color: #666; 
+}
+
+.tagging .button, .tagged .button {
+		color:#aaa;
+}
+.selected .tagging .button, .selected .tagged .button {
+		color:#BFBAB3;
+}
+
+.highlight, .marked {background:transparent; color:#111; border:none; text-decoration:underline;}
+
+.tagging .button:hover, .tagged .button:hover, .tagging .button:active, .tagged .button:active {
+		border: none; background:transparent; text-decoration:underline; color:#333;
+}
+
+
+
+
+
+.popup {
+	background: #999;
+	border: 1px solid #999;
+}
+
+.popup li.disabled {
+	color: #000;
+}
+
+.popup li a, .popup li a:visited {
+	color: #eee;
+	border: none;
+}
+
+.popup li a:hover {
+	background: #6F6A68;
+	color: #fff;
+	border: none;
+}
+
+
+		.tiddler {
+			padding-bottom: 40px;
+			/*border-bottom: 1px solid #999; */
+		}
+
+
+
+
+
+#messageArea {
+	border: 4px solid #999;
+	background: #f5f5f5;
+	color: #999;
+        font-size:90%;
+}
+
+#messageArea a:hover { background:#f5f5f5; border:none;}
+
+#messageArea .button{
+	color: #666;
+	border: 1px solid #CC6714;
+}
+
+#messageArea .button:hover {
+	color: #fff;
+	background: #999;
+	border-color: #999;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.viewer blockquote {
+	border-left: 5px solid #888;
+}
+
+.viewer table {
+	border: 2px solid #888;
+}
+
+.viewer th, thead td {
+	background: #888;
+	border: 1px solid #888;
+	color: #fff;
+}
+.viewer pre {
+	border: 1px solid #999;
+	background: #f5f5f5;
+	font-size: 11px;
+}
+
+.viewer code {
+	color: #111; background:#f5f5f5;
+	font-size: 11px;
+}
+
+.viewer hr {
+	border-top: dashed 1px #999;
+}
+
+.editor input {
+	border: 1px solid #888;
+}
+
+.editor textarea {
+	font-family: monospace;
+	border: 1px solid #888;
+}
+
+.tabContents {background:#f7f7f7;}
+
+h1,h2,h3,h4,h5 { color: #555; background: transparent; padding-bottom:2px; font-family: Arial, Helvetica, sans-serif; }
+h1 {font-size:18px;}
+h2 {font-size:16px;}
+h3 {font-size: 14px;}
+
+#contentFooter {background:#999; color:#dfdfdf; clear: both; padding: 0.5em 1em; }
+
+		#contentFooter a {
+			color: #dfdfdf;
+			border-bottom: 1px dotted #fff; font-weight:normal;
+		}
+		
+		#contentFooter a:hover {
+			color: #FFFFFF;
+			background-color:transparent;
+		}	
+
+table.matrix {
+    border-width: 0px 1px;
+    padding:0px;
+}
+
+table.matrix tr {
+    border: 0px;
+}
+
+table.matrix tr td {
+    border: 0px;
+    font-style: italic;
+}
+&lt;/pre&gt;</description>
+<category>BleachTheme</category>
+<link>#StyleSheet</link>
+<pubDate>Wed, 14 Jul 2010 15:24:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-10</title>
+<description>I've read Aristidou and Lasenby's presentation on FABRIK (Forwards and Backwards Reaching Inverse Kinematics), and it seems very attractive to implement. Although it hasn't been proven to work always, it hasn't failed as well. I feel more attracted to it than the Jacobian method, which isn't as intuitive to me.&lt;br&gt;&lt;br&gt;I read up to Chapter 3 of the article on FABRIK, and it seems not too hard to implement!</description>
+<category>journal</category>
+<link>#2010-07-10</link>
+<pubDate>Mon, 12 Jul 2010 11:24:00 GMT</pubDate>
+
+</item>
+<item>
+<title>DefaultTiddlers</title>
+<description>[tag[journal]][sort[-title]]</description>
+<link>#DefaultTiddlers</link>
+<pubDate>Sat, 10 Jul 2010 22:12:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-08</title>
+<description>Man, I should update my log more...&lt;br&gt;&lt;br&gt;Last week I've given my &quot;final presentation&quot; halfway my project time. The presentation didn't go quite smoothly.&lt;br&gt;&lt;br&gt;Arnoud and I found out (about 2 hours before the presentation) we have a slight miscommunication on the problem I am to solve. It has gotten clear by now.&lt;br&gt;&lt;br&gt;I gave Leo his book back as Bol.com delivered me one. I also made a list of borrowed &lt;a tiddlylink=&quot;Books&quot; refresh=&quot;link&quot; target=&quot;_blank&quot; title=&quot;External link to #Books&quot; href=&quot;#Books&quot; class=&quot;externalLink null&quot;&gt;books&lt;/a&gt; (and their current location) and used &lt;a tiddlylink=&quot;Papers&quot; refresh=&quot;link&quot; target=&quot;_blank&quot; title=&quot;External link to #Papers&quot; href=&quot;#Papers&quot; class=&quot;externalLink null&quot;&gt;papers&lt;/a&gt;.&lt;br&gt;&lt;br&gt;Leo sent me the presentation of Aristidou and Lasenby, given during Leo's conference on GA's. It's about inverse kinematics, and how to solve it iteratively. It only isn't fully proven to work in every case, although Leo thinks it's plausible to hold.&lt;br&gt;&lt;br&gt;I started reading on differential kinematics to implement little changes in the system.</description>
+<category>journal</category>
+<link>#2010-07-08</link>
+<pubDate>Sat, 10 Jul 2010 19:59:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-07-01</title>
+<description>I finished the first two parts of the GA introductory articles yesterday, and asked Leo some questions by e-mail. &lt;br&gt;&lt;br&gt;Worked a bit on the presentation I have to give 5 July, that's next Monday already! I also started reading the &quot;unofficial&quot; part III</description>
+<category>journal</category>
+<link>#2010-07-01</link>
+<pubDate>Thu, 01 Jul 2010 15:26:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-06-29</title>
+<description>I've got the two books! I just read &lt;a target=&quot;_blank&quot; title=&quot;External link to http://www.science.uva.nl/~leo/clifford/dorst-mann-I.pdf&quot; href=&quot;http://www.science.uva.nl/%7Eleo/clifford/dorst-mann-I.pdf&quot; class=&quot;externalLink&quot;&gt;part I&lt;/a&gt; of a series of three (&lt;a target=&quot;_blank&quot; title=&quot;External link to http://www.science.uva.nl/~leo/clifford/dorst-mann-II.pdf&quot; href=&quot;http://www.science.uva.nl/%7Eleo/clifford/dorst-mann-II.pdf&quot; class=&quot;externalLink&quot;&gt;part II&lt;/a&gt;, &lt;a target=&quot;_blank&quot; title=&quot;External link to http://www.science.uva.nl/~leo/clifford/CGA3.pdf&quot; href=&quot;http://www.science.uva.nl/%7Eleo/clifford/CGA3.pdf&quot; class=&quot;externalLink&quot;&gt;part III&lt;/a&gt;) on geometric algebra. I don't think I fully understand it yet, but I will look up some definitions (on wikipedia, the GA book or someplace else).</description>
+<category>journal</category>
+<link>#2010-06-29</link>
+<pubDate>Tue, 29 Jun 2010 13:45:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-06-28</title>
+<description>Haven't kept track of my progress on this log for a while...&lt;br&gt;&lt;br&gt;Talked to Arnoud today, and we came to the idea that it might be a good idea to look into either differential equations or geometric algebra.  I've mailed with Leo Dorst on the latter, and he thinks it should be not too hard to describe my problem in GA. I can borrow his book for some days. I also asked a friend to bring her study book on differential equations tomorrow to Science Park. &lt;br&gt;&lt;br&gt;And as a last thing on lecture, I borrowed a book of Arnoud, &quot;Robot Modeling and Control&quot; by Spong, Mutchinson and Vidyasagar.&lt;br&gt;&lt;br&gt;Oh yeah, figured out what went wrong the last time. I should've used a matrix &lt;br&gt;&lt;table class=&quot;matrix&quot;&gt;&lt;tbody&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td align=&quot;center&quot;&gt;R&lt;/td&gt;&lt;td align=&quot;center&quot;&gt;Rt&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;center&quot;&gt;&lt;strong&gt;0&lt;/strong&gt;&lt;sup&gt;T&lt;/sup&gt;&lt;/td&gt;&lt;td align=&quot;center&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;instead of &lt;br&gt;&lt;table class=&quot;matrix&quot;&gt;&lt;tbody&gt;&lt;tr class=&quot;evenRow&quot;&gt;&lt;td align=&quot;center&quot;&gt;R&lt;/td&gt;&lt;td align=&quot;center&quot;&gt;t&lt;/td&gt;&lt;/tr&gt;&lt;tr class=&quot;oddRow&quot;&gt;&lt;td align=&quot;center&quot;&gt;&lt;strong&gt;0&lt;/strong&gt;&lt;sup&gt;T&lt;/sup&gt;&lt;/td&gt;&lt;td align=&quot;center&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;, where &lt;em&gt;R&lt;/em&gt; represents the rotation and &lt;em&gt;t&lt;/em&gt; the translation.</description>
+<category>journal</category>
+<link>#2010-06-28</link>
+<pubDate>Mon, 28 Jun 2010 22:32:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-06-11</title>
+<description>Looked at the equations I made earlier. Found out that [x, 0, 0]&lt;sub&gt;Laser&lt;/sub&gt; = [(x+90), 98, 0]&lt;sub&gt;ElbowYaw&lt;/sub&gt;. Which shouldn't be that, as the z-component should at least be positive!&lt;br&gt;&lt;br&gt;Gives me stuff to think about during the weekend...</description>
+<category>journal</category>
+<link>#2010-06-11</link>
+<pubDate>Fri, 11 Jun 2010 16:50:00 GMT</pubDate>
+
+</item>
+<item>
+<title>2010-06-05</title>
+<description>Again, writing on my thesis. Now I've started on some basic robotics terminology. Haven't found a way to fit Denavit-Hartenberg in yet, but I will mention it in that section.&lt;br&gt;&lt;br&gt;Oh, and I made the report look even fancier. And made my log use the same colors.</description>
+<category>journal</category>
+<link>#2010-06-05</link>
+<pubDate>Sat, 05 Jun 2010 22:02:00 GMT</pubDate>
+
+</item>
+</channel>
+</rss>
