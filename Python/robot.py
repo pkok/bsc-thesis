@@ -1,5 +1,6 @@
 """
-Handles reasoning about sensor data and the actual movement.
+Handles reasoning about sensor data and the actual movement.  It communicates
+mostly with the IKSolver module (Java).
 """
 
 
