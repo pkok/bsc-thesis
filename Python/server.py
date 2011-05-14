@@ -21,10 +21,16 @@ def start():
 
     It registers that they are started.
     """
+    i = 0
+    settings.verbose("Starting the joystick servers...")
     if server['LEFT'] is None:
         _start_left_server()
+        i += 1
     if server['RIGHT'] is None:
         _start_right_server()
+        i += 1
+    if i:
+        print "All joystick servers are already up and running."
 
 
 
@@ -34,10 +40,16 @@ def stop():
 
     It registers that they are stopped.
     """
+    i = 0
+    settings.verbose("Stopping the joystick servers...")
     if server['LEFT']:
         _stop_left_server()
+        i += 1
     if server['RIGHT']:
         _stop_right_server()
+        i += 1
+    if i:
+        settings.verbose("All joystick servers are already halted."
 
 
 
@@ -89,9 +101,11 @@ def _start_left_server():
 
     It listens in a separate thread.
     """
+    settings.verbose("Starting left joystick server...")
     server['LEFT'] = SocketServer.TCPServer((settings.ANDROID_SERVER_HOST,
         settings.ANDROID_SERVER_PORT_LEFT), LeftAndroidRequestHandler)
     thread.start_new_thread(server['LEFT'].serve_forever, None)
+    settings.verbose("Left joystick server started.")
 
 
 
@@ -99,8 +113,10 @@ def _stop_left_server():
     """
     Stop the server for the left joystick.
     """
+    settings.verbose("Stopping left joystick server...")
     server['LEFT'].shutdown()
     server['LEFT'] = None
+    settings.verbose("Left joystick server halted.")
 
 
 
@@ -110,9 +126,11 @@ def _start_right_server():
 
     It listens in a separate thread.
     """
+    settings.verbose("Starting right joystick server...")
     server['RIGHT'] = SocketSever.TCPServer((settings.ANDROID_SERVER_HOST,
         settings.ANDROID_SERVER_PORT_RIGHT), RightAndroidRequestHandler)
     thread.start_new_thread(server['RIGHT'].serve_forever, None)
+    settings.verbose("Right joystick server started.")
 
 
 
@@ -120,5 +138,7 @@ def _stop_right_server():
     """
     Stop the server for the right joystick.
     """
+    settings.verbose("Stopping right joystick server...")
     server['RIGHT'].shutdown()
     server['RIGHT'] = None
+    settings.verbose("Right joystick server halted.")
