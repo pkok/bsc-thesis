@@ -1,0 +1,3 @@
+With this bachelor thesis I try to develop an inverse kinematics solver based on geometric algebra (Clifford algebra) for the Nao robot, which is heavily limited in the possible configurations of the robot.
+
+For more info and my lab journal, see http://rangedhaptics.wordpress.com/ 
