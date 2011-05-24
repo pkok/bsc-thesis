@@ -10,19 +10,49 @@ import naoqi
 robot = None
 
 def start():
+    """
+    Connect with the NAO robot.
+
+    You can set to which NaoQi server to connect in settings.ini.
+    """
     global robot
 
     # TODO: make a NAO_model
+    settings.verbose("Connecting with the Nao at %s:%s" %
+            (settings.NAOQI_HOST, settings.NAOQI_PORT))
     robot = NAO(None, settings.NAOQI_HOST, settings.NAOQI_PORT)
     robot.connect()
+    settings.verbose("Connected!")
 
 
 
 def stop():
+    """
+    Disconnect from the NAO robot.
+    """
     global robot
 
+    settings.verbose("Closing connection with Nao at %s:%s" %
+            (settings.NAOQI_HOST, settings.NAOQI_PORT))
+    if not robot.proxies:
+        settings.verbose("Already disconnected.")
+        return
     robot.close_connections()
     robot = None
+    settings.verbose("Disconnecting succesful!")
+
+
+
+#DUMMY
+def move(kinematic_chain, movement):
+    """
+    Translate the end effector of kinematic_chain over movement.
+
+    Dummy method; it needs more implementating!
+    """
+    if robot is None or not robot.is_connected():
+        return False
+    return kinematic_chain in NAO.kinematic_chains
 
 
 
@@ -34,14 +64,14 @@ class NAO(object):
             'ALMemory',
             'ALTextToSpeech',
             ]
-    kinematic_chain = {
-            'HEAD': 'Head',
-            'LEFT_ARM': 'LArm', 
-            'RIGHT_ARM': 'RArm',
-            'LEFT_LEG': 'LLeg',
-            'RIGHT_LEG': 'RLeg',
-            'TORSO': 'Torso',
-            }
+    kinematic_chains = [
+            'Head',
+            'LArm', 
+            'RArm',
+            'LLeg',
+            'RLeg',
+            'Torso',
+            ]
 
     def __init__(self, model, host, port):
         self.model = model
@@ -49,13 +79,9 @@ class NAO(object):
         self.port = port
         self.proxies = dict()
 
-    def __del__(self):
-        self.close_connections()
-        del super(type(self), self)
-
     def close_connections(self):
-        for proxy_name, proxy in self.proxies.itervalues():
-            proxy.exit()
+        for proxy_name in self.proxies.keys():
+            self.proxies[proxy_name].exit()
             del self.proxies[proxy_name]
 
     def connect(self):
@@ -67,3 +93,9 @@ class NAO(object):
         for req_proxy in self.required_proxies:
             self.proxies[req_proxy] = naoqi.ALProxy(req_proxy, self.host,
                     self.port)
+
+    def is_connected(self):
+        for req_proxy in self.required_proxies:
+            if not self.proxies.has_key[req_proxy]:
+                return False
+        return True

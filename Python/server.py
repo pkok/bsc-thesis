@@ -5,6 +5,7 @@ Provides the communication mechanism between the Android phones and Nao robot.
 
 import robot
 import settings
+import atexit
 import SocketServer
 import threading
 
@@ -15,15 +16,16 @@ Contains the SocketServers for the joystick controller.
 server = None
 
 
+
 def start():
     """
-    Call this to start the left and right joystick servers.
+    Start the joystick server.
 
-    It registers that they are started.
+    It also registers that they are started.
     """
     global server
 
-    settings.verbose("Starting the joystick server..."))
+    settings.verbose("Starting the joystick server...")
     if server:
         settings.verbose("Joystick server was already up and running.")
         return
@@ -38,9 +40,9 @@ def start():
 
 def stop():
     """
-    Call this to stop the left and right joystick servers.
+    Stop the joystick server.
 
-    It registers that they are stopped.
+    It also registers that they are stopped.
     """
     global server
 
@@ -52,6 +54,7 @@ def stop():
     server = None
     settings.verbose("Joystick server has halted.")
 
+atexit.register(stop)
 
 
 class AndroidRequestHandler(SocketServer.StreamRequestHandler):
@@ -63,7 +66,7 @@ class AndroidRequestHandler(SocketServer.StreamRequestHandler):
     When it will hit something, it won't move, and the RequestHandler notifies
     this to its client.  The client should vibrate to notify its user.
     """
-    def handle():
+    def handle(self):
         """
         Get the request, test whether the movement is legal, and return
         appropriately.
