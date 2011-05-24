@@ -169,7 +169,7 @@ def symbol(value):
         if value[0].isalpha() and value.isalnum():
             return GASymbol(typ=GATypes.variable, value=value)
         if all(map(lambda x: x.isdigit(), value.split('e'))):
-            return symbol(value)
+            value = settings.NUMBER_TYPE(value)
 
     if isinstance(value, settings.NUMBER_TYPE) or \
             isinstance(value, numbers.Number):
