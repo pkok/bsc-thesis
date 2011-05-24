@@ -20,4 +20,9 @@ public class Toolkit {
 
     return p;
   }
+
+  public static void main(String... args){
+    Properties p = getSettings();
+    p.list(System.out);
+  }
 }

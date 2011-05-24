@@ -4,7 +4,7 @@ mostly with the IKSolver module (Java).
 """
 
 
-import settings
+import toolkit
 import naoqi
 
 robot = None
@@ -18,11 +18,11 @@ def start():
     global robot
 
     # TODO: make a NAO_model
-    settings.verbose("Connecting with the Nao at %s:%s" %
-            (settings.NAOQI_HOST, settings.NAOQI_PORT))
-    robot = NAO(None, settings.NAOQI_HOST, settings.NAOQI_PORT)
+    toolkit.verbose("Connecting with the Nao at %s:%s" %
+            (toolkit.settings["NAOQI_HOST"], toolkit.settings["NAOQI_PORT"]))
+    robot = NAO(None, toolkit.settings["NAOQI_HOST"], toolkit.settings["NAOQI_PORT"])
     robot.connect()
-    settings.verbose("Connected!")
+    toolkit.verbose("Connected!")
 
 
 
@@ -32,14 +32,14 @@ def stop():
     """
     global robot
 
-    settings.verbose("Closing connection with Nao at %s:%s" %
-            (settings.NAOQI_HOST, settings.NAOQI_PORT))
+    toolkit.verbose("Closing connection with Nao at %s:%s" %
+            (toolkit.settings["NAOQI_HOST"], toolkit.settings["NAOQI_PORT"]))
     if not robot.proxies:
-        settings.verbose("Already disconnected.")
+        toolkit.verbose("Already disconnected.")
         return
     robot.close_connections()
     robot = None
-    settings.verbose("Disconnecting succesful!")
+    toolkit.verbose("Disconnecting succesful!")
 
 
 

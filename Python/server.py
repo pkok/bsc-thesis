@@ -4,7 +4,7 @@ Provides the communication mechanism between the Android phones and Nao robot.
 
 
 import robot
-import settings
+import toolkit
 import atexit
 import SocketServer
 import threading
@@ -25,16 +25,16 @@ def start():
     """
     global server
 
-    settings.verbose("Starting the joystick server...")
+    toolkit.verbose("Starting the joystick server...")
     if server:
-        settings.verbose("Joystick server was already up and running.")
+        toolkit.verbose("Joystick server was already up and running.")
         return
-    server = ThreadedTCPServer((settings.ANDROID_SERVER_HOST,
-        settings.ANDROID_SERVER_PORT), AndroidRequestHandler)
+    server = ThreadedTCPServer((toolkit.settings["ANDROID_SERVER_HOST"],
+        toolkit.settings["ANDROID_SERVER_PORT"]), AndroidRequestHandler)
     server_thread = threading.Thread(target=server.serve_forever)
     server_thread.setDaemon(True)
     server_thread.start()
-    settings.verbose("Joystick server has started.")
+    toolkit.verbose("Joystick server has started.")
 
 
 
@@ -46,13 +46,13 @@ def stop():
     """
     global server
 
-    settings.verbose("Stopping the joystick servers...")
+    toolkit.verbose("Stopping the joystick servers...")
     if not server:
-        settings.verbose("Joystick server is already halted.")
+        toolkit.verbose("Joystick server is already halted.")
         return
     server.shutdown()
     server = None
-    settings.verbose("Joystick server has halted.")
+    toolkit.verbose("Joystick server has halted.")
 
 atexit.register(stop)
 
@@ -72,7 +72,8 @@ class AndroidRequestHandler(SocketServer.StreamRequestHandler):
         appropriately.
         """
         req = self.rfile.readline().strip()
-        kinematic_chain_id, phone_movement = req.split(settings.MSG_SPLITTER)
+        kinematic_chain_id, phone_movement = req.split(\
+                toolkit.settings["MSG_SPLITTER"])
         possible = robot.move(kinematic_chain_id, phone_movement)
         self.wfile.write(possible)
 

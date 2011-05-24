@@ -1,5 +1,5 @@
 # TODO implement GASymbol.evaluate and interpret the reply of GAViewer
-import settings
+import toolkit
 
 import collections
 import numbers
@@ -169,9 +169,9 @@ def symbol(value):
         if value[0].isalpha() and value.isalnum():
             return GASymbol(typ=GATypes.variable, value=value)
         if all(map(lambda x: x.isdigit(), value.split('e'))):
-            value = settings.NUMBER_TYPE(value)
+            value = toolkit.settings["NUMBER_TYPE"](value)
 
-    if isinstance(value, settings.NUMBER_TYPE) or \
+    if isinstance(value, toolkit.settings["NUMBER_TYPE"]) or \
             isinstance(value, numbers.Number):
         return GASymbol(typ=GATypes.value, value=value)
 
