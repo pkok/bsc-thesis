@@ -16,6 +16,7 @@ def _boolean(value):
         raise ValueError, 'Not a boolean: %s' % value
     return _boolean_states[v.lower()]
 
+
 def _type(kls):
     """Interpret a string to get the corresponding type.
 
@@ -35,23 +36,33 @@ def _type(kls):
         m = getattr(m, comp)            
     return m
 
-class DefaultSectionConfigParser(ConfigParser.RawConfigParser):
-    def __init__(self, default_section, *args, **kwargs):
-        ConfigParser.RawConfigParser.__init__(self, *args, **kwargs)
-        self.default_section = default_section
 
-    def __getitem__(self, option):
-        try_types = [int, float, _boolean, _type]
-        value = self.get(self.default_section, option)
-        for typ in try_types:
-            try:
-                return typ(value)
-            except:
+def interpret(value):
+    try_types = [int, float, _boolean, _type]
+    for typ in try_types:
+        try:
+            return typ(value)
+        except:
+            continue
+    return value
+
+
+config_comment_symbol = "#"
+
+def read_config(filename):
+    f = open(filename)
+    settings = dict()
+    for line in f:
+        if not line.startswith(config_comment_symbol): # Don't process comments
+            values = map(lambda x: x.strip(), line.split("=", 1))
+            if not values[0]: # skip on empty lines
                 continue
-        return value
-        
-settings = DefaultSectionConfigParser("default")
-settings.readfp(open("../settings.ini"))
+            if len(values) == 1:
+                values.append("None")
+            settings[values[0]] = interpret(values[1])
+    return settings
+
+settings = read_config('bsc-thesis/settings.ini')
 
 
 zero = settings["NUMBER_TYPE"]("0")
