@@ -1,17 +1,25 @@
-# TODO implement GASymbol.evaluate and interpret the reply of GAViewer
+# TODO implement _interpret_gaviewer_output(some_string)
 import toolkit
 
 import collections
 import numbers
+import socket
 
 
 class GASymbol(object):
+    _gaviewer = None
+
     def __init__(self, typ, value):
         self.type = typ
         self.value = value
 
     def evaluate(self):
-        pass
+        if self._gaviewer is None:
+            self._gaviewer = socket.create_connection((\
+                    toolkit.settings['KINEMATICS_SERVER_HOST'],
+                    toolkit.settings['KINEMATICS_SERVER_PORT']))
+        self._gaviewer.send(str(self) + ";$")
+        return _interpret_gaviewer_output(self._gaviewer.recv(4096))
 
     def is_terminal(self):
         return self.type in [GATypes.variable, GATypes.value]
@@ -181,6 +189,10 @@ def symbol(value):
 
 def operator(operator):
     return lambda *values: GAOperator(operator, *values)
+
+
+def _interpret_gaviewer_output(gaexpr):
+    raise NotImplementedError, "Needs moar implementing."
 
 
 add = operator('+')
