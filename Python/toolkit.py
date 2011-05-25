@@ -1,7 +1,7 @@
 import ConfigParser
 import types
-import numpy
-import numpy.linalg
+#import numpy
+#import numpy.linalg
 
 
 _boolean_states = {'1': True, 'yes': True, 'true': True, 'on': True,
@@ -28,7 +28,7 @@ def _type(kls):
     """
     parts = kls.split('.')
     if len(parts) == 1:
-        kls[0] = kls[0].upper()
+        kls = kls[0].upper() + kls[1:]
         return getattr(types, kls + "Type")
     module = ".".join(parts[:-1])
     m = __import__( module )
@@ -62,7 +62,7 @@ def read_config(filename):
             settings[values[0]] = interpret(values[1])
     return settings
 
-settings = read_config('bsc-thesis/settings.ini')
+settings = read_config('../settings.ini')
 
 
 zero = settings["NUMBER_TYPE"]("0")
@@ -70,7 +70,7 @@ one = settings["NUMBER_TYPE"]("1")
 
 def verbose(message, level=1):
     if settings["VERBOSITY"] >= level:
-        print message)
+        print message
 
 class interval(object):
     """
