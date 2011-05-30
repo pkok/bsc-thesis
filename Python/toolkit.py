@@ -54,7 +54,7 @@ def read_config(filename):
     settings = dict()
     for line in f:
         if not line.startswith(config_comment_symbol): # Don't process comments
-            values = map(lambda x: x.strip(), line.split("=", 1))
+            values = map(str.strip(), line.split("=", 1))
             if not values[0]: # skip on empty lines
                 continue
             if len(values) == 1:

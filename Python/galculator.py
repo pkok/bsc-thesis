@@ -2,6 +2,7 @@
 import toolkit
 
 import collections
+import functools
 import numbers
 import socket
 
@@ -27,76 +28,72 @@ class GASymbol(object):
     def __str__(self):
         return str(self.value)
 
-    @staticmethod
-    def _operator(operator, arity, *values):
-        return GAOperator(operator, arity, *values)
-
     def __add__(self, right_value):
-        return self._operator('+', self, right_value)
+        return plus(self, right_value)
     def __sub__(self, right_value):
-        return self._operator('-', self, right_value)
+        return minus(self, right_value)
     def __mul__(self, right_value):
-        return self._operator('*', self, right_value)
+        return times(self, right_value)
     def __div__(self, right_value):
-        return self._operator('/', self, right_value)
+        return div(self, right_value)
     def __truediv__(self, right_value):
-        return self._operator('/', self, right_value)
+        return div(self, right_value)
     def __pow__(self, right_value):
-        return self._operator('^', self, right_value)
+        return wedge(self, right_value)
     def __xor__(self, right_value):
-        return self._operator('^', self, right_value)
+        return wedge(self, right_value)
     def __lshift__(self, right_value):
-        return self._operator('lcont', self, right_value)
+        return lcont(self, right_value)
     def __rshift__(self, right_value):
-        return self._operator('rcont', self, right_value)
+        return rcont(self, right_value)
 
     def __radd__(self, left_value):
-        return self._operator('+', left_value, self)
+        return plus(left_value, self)
     def __rsub__(self, left_value):
-        return self._operator('-', left_value, self)
+        return minus(left_value, self)
     def __rmul__(self, left_value):
-        return self._operator('*', left_value, self)
+        return times(left_value, self)
     def __rdiv__(self, left_value):
-        return self._operator('/', left_value, self)
+        return div(left_value, self)
     def __rtruediv__(self, left_value):
-        return self._operator('/', left_value, self)
+        return div(left_value, self)
     def __rpow__(self, left_value):
-        return self._operator('^', left_value, self)
+        return wedge(left_value, self)
     def __rxor__(self, left_value):
-        return self._operator('^', left_value, self)
+        return wedge(left_value, self)
     def __rlshift__(self, left_value):
-        return self._operator('lcont', left_value, self)
+        return lcont(left_value, self)
     def __rrshift__(self, right_value):
-        return self._operator('rcont', left_value, self)
+        return rcont(left_value, self)
 
     def __iadd__(self, right_value):
-        return self._operator('+', self, right_value)
+        return plus(self, right_value)
     def __isub__(self, right_value):
-        return self._operator('-', self, right_value)
+        return minus(self, right_value)
     def __imul__(self, right_value):
-        return self._operator('*', self, right_value)
+        return times(self, right_value)
     def __idiv__(self, right_value):
-        return self._operator('/', self, right_value)
+        return div(self, right_value)
     def __itruediv__(self, right_value):
-        return self._operator('/', self, right_value)
+        return div(self, right_value)
     def __ipow__(self, right_value):
-        return self._operator('^', self, right_value)
+        return wedge(self, right_value)
     def __ixor__(self, right_value):
-        return self._operator('^', self, right_value)
+        return wedge(self, right_value)
     def __ilshift__(self, right_value):
-        return self._operator('lcont', self, right_value)
+        return lcont(self, right_value)
     def __irshift__(self, right_value):
-        return self._operator('rcont', self, right_value)
+        return rcont(self, right_value)
 
 
     def __neg__(self):
-        return self._operator('-', self)
+        return minus(self)
     def __pos__(self):
-        return self._operator('+', self)
+        return plus(self)
     def __abs__(self):
-        return self._operator('abs', self)
+        return abs(self)
     def __invert__(self):
-        return self._operator('inverse', self)
+        return inv(self)
 
 
 
@@ -176,7 +173,7 @@ def symbol(value):
     if isinstance(value, basestring):
         if value[0].isalpha() and value.isalnum():
             return GASymbol(typ=GATypes.variable, value=value)
-        if all(map(lambda x: x.isdigit(), value.split('e'))):
+        if all(map(str.isdigit, value.split('e'))):
             value = toolkit.settings["NUMBER_TYPE"](value)
 
     if isinstance(value, toolkit.settings["NUMBER_TYPE"]) or \
@@ -188,17 +185,19 @@ def symbol(value):
 
 
 def operator(operator):
-    return lambda *values: GAOperator(operator, *values)
+    return functools.partial(GAOperator, operator)
 
 
 def _interpret_gaviewer_output(gaexpr):
     raise NotImplementedError, "Needs moar implementing."
 
 
-add = operator('+')
+plus = operator('+')
 minus = operator('-')
 times = operator('*')
 div = operator('/')
+wedge = operator('^')
 lcont = operator('lcont')
 rcont = operator('rcont')
 inv = operator('inverse')
+abs = operator('abs')
