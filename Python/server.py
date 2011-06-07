@@ -57,6 +57,17 @@ def stop():
 atexit.register(stop)
 
 
+# TODO: Set a right weight for this by empirical testing.
+@toolkit.dummy
+def transform_phone_movement(kchain_id, movement):
+    """
+    Transform the phone's movement to something sensible for the robot.
+
+    It currently does nothing; the phone and robot move on a 1:1 scale.
+    """
+    return movement
+
+
 class AndroidRequestHandler(SocketServer.StreamRequestHandler):
     """
     The RequestHandler for using an Android phone as joystick.
@@ -72,9 +83,10 @@ class AndroidRequestHandler(SocketServer.StreamRequestHandler):
         appropriately.
         """
         req = self.rfile.readline().strip()
-        kinematic_chain_id, phone_movement = req.split(\
-                toolkit.settings["MSG_SPLITTER"])
-        possible = robot.move(kinematic_chain_id, phone_movement)
+        kchain_id, phone_movement = \
+                req.split(toolkit.settings["MSG_SPLITTER"])
+        robot_movement = transform_phone_movement(kchain_id, phone_movement)
+        possible = robot.compute_target_position(kchain_id, phone_movement)
         self.wfile.write(possible)
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):

@@ -5,7 +5,11 @@ mostly with the IKSolver module (Java).
 
 
 import toolkit
-import naoqi
+try:
+    import naoqi
+except ImportError:
+    import dummy_naoqi as naoqi
+import operator
 
 robot = None
 
@@ -43,16 +47,74 @@ def stop():
 
 
 
-#DUMMY
-def move(kinematic_chain, movement):
+@toolkit.untested
+def move(kchain_id, movement):
     """
-    Translate the end effector of kinematic_chain over movement.
+    Translate the end effector of kinematic chain kchain_id over movement.
 
-    Dummy method; it needs more implementating!
+    If the robot can move its end effector of kchain_id over movement, it will
+    make this move and this function returns toolkit.settings["SIG_MOVE_OKAY"].
+    Otherwise, this returns toolkit.settings["SIG_NO_MOVE"].
     """
+    try:
+        target = compute_target_position(kchain_id, movement)
+    except OutOfScannerRangeException as e:
+        target = e.args[0]["off plane"]
+    if robot.free_space(target):
+        robot.move(kchain_id, target)
+        return toolkit.settings["SIG_MOVE_OKAY"]
+    return toolkit.settings["SIG_NO_MOVE"]
+
+
+
+@toolkit.untested
+def compute_target_position(kchain_id, motion):
     if robot is None or not robot.is_connected():
+        toolkit.verbose("It seems that the system is not setup properly. " \
+                + "Did you run all start() sequences?")
         return False
-    return kinematic_chain in NAO.kinematic_chains
+
+    target = robot.kinematic_chain[kchain_id] + motion
+    laser_plane = robot.get_laser_plane()
+
+    if not in_plane(target, laser_plane):
+        new_target = orthogonal_projection(target, laser_plane)
+        difference = dist(new_target, target)
+        if abs(difference) > toolkit.settings['SCANNER_AREA_STICKINESS']:
+            details = {"off plane": target,\
+                    "on plane": new_target,\
+                    "difference": difference}
+            raise OutOfScannerRangeException, details
+        target = new_target
+    return target
+
+
+
+@toolkit.dummy
+def orthogonal_projection(point, plane):
+    return point
+
+
+
+@toolkit.dummy
+def in_plane(point, plane):
+    return True
+
+
+
+def dist(x, y):
+    """
+    Compute the norm of the difference vector of x and y.
+
+    So that is ||x - y||^2 == (x - y) . (x - y)
+    """
+    diff = map(operator.sub, x, y)
+    return sum(map(operator.mul, diff, diff))
+
+
+
+class OutOfScannerRangeException(BaseException):
+    pass
 
 
 
@@ -94,8 +156,27 @@ class NAO(object):
             self.proxies[req_proxy] = naoqi.ALProxy(req_proxy, self.host,
                     self.port)
 
+    @toolkit.untested
     def is_connected(self):
-        for req_proxy in self.required_proxies:
-            if not self.proxies.has_key[req_proxy]:
-                return False
-        return True
+        return all(req_proxy in self.proxies\
+                for req_proxy in self._required_proxies)
+
+    @toolkit.untested
+    def move(self, kchain, target):
+        """
+        Move an end effector to a target point.
+        """
+        import motion
+        self.proxies["ALMotion"].setPosition(kchain, motion.SPACE_TORSO,
+                target, toolkit.settings["NAO_MAXSPEED"], 7)
+
+    @toolkit.dummy
+    def get_laser_plane(self):
+        raise NotImplementedError, "Will be implemented in a later stadium."
+
+    @toolkit.dummy
+    def free_space(self, target):
+        """
+        Check if target is an unoccupied space.
+        """
+        raise NotImplementedError, "Will be implemented in a later stadium."
