@@ -26,7 +26,7 @@ def dummy(decoratee):
     Decorates functions that need a more sensible implementation.
     """
     def decorated(*args, **kwargs):
-        verbose("'%s' needs more implementing" % decoratee.__name__)
+        verbose("'%s' needs more implementing" % decoratee.func_name)
         return decoratee(*args, **kwargs)
     return decorated
 
@@ -35,7 +35,7 @@ def untested(decoratee):
     Displays a reminder that the decoratee has not been tested yet.
     """
     def decorated(*args, **kwargs):
-        verbose("'%s' has not yet been tested!!!" % decoratee.__name__)
+        verbose("'%s' has not yet been tested!!!" % decoratee.func_name)
         return decoratee(*args, **kwargs)
     return decorated
 
