@@ -24,8 +24,9 @@ def start():
     # TODO: make a NAO_model
     toolkit.verbose("Connecting with the Nao at %s:%s" %
             (toolkit.settings["NAOQI_HOST"], toolkit.settings["NAOQI_PORT"]))
-    robot = NAO(None, toolkit.settings["NAOQI_HOST"], toolkit.settings["NAOQI_PORT"])
+    robot = NAO(toolkit.settings["NAOQI_HOST"], toolkit.settings["NAOQI_PORT"])
     robot.connect()
+    robot.init_position()
     toolkit.verbose("Connected!")
 
 
@@ -135,16 +136,19 @@ class NAO(object):
             'Torso',
             ]
 
-    def __init__(self, model, host, port):
-        self.model = model
+    _default_dict = functools.partial(collections.defaultdict, lambda: None)
+
+    def __init__(self, host, port):
         self.host = host
         self.port = port
         self.proxies = dict()
+        self.end_effector = self._default_dict()
 
     def close_connections(self):
         for proxy_name in self.proxies.keys():
             self.proxies[proxy_name].exit()
             del self.proxies[proxy_name]
+        self.end_effector = self._default_dict()
 
     def connect(self):
         """
@@ -155,6 +159,8 @@ class NAO(object):
         for req_proxy in self.required_proxies:
             self.proxies[req_proxy] = naoqi.ALProxy(req_proxy, self.host,
                     self.port)
+        for kchain in self.__kinematic_chains:
+            self.end_effector[kchain] = end_effector(kchain)
 
     @toolkit.untested
     def is_connected(self):
@@ -180,3 +186,14 @@ class NAO(object):
         Check if target is an unoccupied space.
         """
         raise NotImplementedError, "Will be implemented in a later stadium."
+
+
+EndEffector = collections.namedtuple('EndEffector',\
+        ['position', 'orientation']))
+
+def end_efector(*args):
+    if len(args) == 1:
+        if type(args) == str:
+            args = robot.proxies["ALMotion"].getPosition(args)
+        args = args[:3], args[3:]
+    return EndEffector(*args)
