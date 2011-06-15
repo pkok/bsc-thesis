@@ -1,5 +1,7 @@
+package nl.cxiu.thesis;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+//import java.io.FileNotFoundException;
 import java.util.Properties;
 
 public class Toolkit {
