@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
+    android:layout_height="fill_parent" 
+    android:orientation="vertical">
+    
+    <LinearLayout android:id="@+id/connect_block"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal">
+    	<EditText android:id="@+id/input_ip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:text="192.168.1.1" />
+    	<EditText android:id="@+id/input_port" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="9559" />
+    	<Button android:id="@+id/button_connect" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Connect!" />
+    </LinearLayout>
+    
+    <RadioGroup android:id="@+id/which_arm_radios" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+    	<RadioButton android:id="@+id/left_radio" android:layout_alignParentLeft="true" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="left arm" />
+    	<RadioButton android:id="@+id/right_radio" android:layout_alignTop="@id/left_radio" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="right arm" />
+    </RadioGroup>
+    
+    <ToggleButton android:id="@+id/toggle_send_data" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1" android:textOn="Send movement" android:textOff="Do not send movement" />
 </LinearLayout>
