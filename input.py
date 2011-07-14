@@ -1,44 +1,67 @@
+#!/usr/bin/env python
 import cwiid
+import numpy
 import socket
+import sys
 
-def init(s):
-    print "Connect to first Wii Remote. " +\
-            "Press the 1+2 button on the Wii Remote, and then press enter."
-    w1 = cwiid.Wiimote()
-    w1.led = cwiid.LED1_ON
-    w1.rpt_mode = cwiid.RPT_IR
-    w1.enable(cwiid.FLAG_MESG_IFC)
-    w1.mesg_callback = f(1, s)
-    print "Connect to the second Wii Remote. " +\
-            "Press the 1+2 buttons on the Wii Remote, and then press enter."
-    w2 = cwiid.Wiimote()
-    w2.led = cwiid.LED2_ON
-    w2.rpt_mode = cwiid.RPT_IR
-    w2.enable(cwiid.FLAG_MESG_IFC)
-    w2.mesg_callback = f(2, None)
+COLOR = ["cyan", "magenta", "yellow", "red", "green", "blue", "black", "white"]
+point = dict()
 
-    return w1, w2
+def init(sock):
+    wiimote_count = int(raw_input("How many Wii Remotes to connect? "))
+    wiimotes = list()
+    for wiimote_nr in range(wiimote_count):
+        raw_input("Put Wii Remote #%d in discovery mode, and press enter. " % wiimote_nr + 1)
+        wiimote = cwiid.Wiimote()
+        wiimote.led = wiimote_nr + 1
+        wiimote.rpt_mode = cwiid.RPT_BTN ^ cwiid.RPT_IR
+        wiimote.enable(cwiid.FLAG_MESG_IFC)
+        wiimote.mesg_callback = f(wiimote, wiimote_nr, sock)
+        wiimotes.append(wiimote)
+        point[wiimote] = numpy.array((0, 0))
+    print "Connected!"
+    return wiimotes
 
-def f(n, s):
-    def x(ms, t):
-        for m in filter(None, ms):
-            if m[0] == 3:
-                y = filter(None, m[1])
-                if y:
-                    print y
-                    if s:
-                        print y[0]["pos"]
-                        print (type(y[0]["pos"][0]), type(y[0]["pos"][1]))
-                        T1 = "(1 + %.3f e1 ni)" % (y[0]["pos"][0] / 1024.)
-                        T2 = "(1 + %.3f e2 ni)" % (y[0]["pos"][1] / 768.)
-                        s.send("cyan(%s %s no ~%s ~%s),$" % (T1, T2, T2, T1))
-                    print str(n) + "<" + ",".join([str(x["pos"]) for x in y]) + ">"
+track = [False, False]
+track = [True, True]
+def f(wiimote, wm_id, sock):
+    point_pos = "%(x).3f e1 - %(y).3f e2"
+    GAVIEWER_MESG = "p%d = %s(c3ga_point(%s)),$" \
+            % (wm_id, COLOR[wm_id % len(COLOR)], point_pos)
+    def x(mesgs, t):
+        for mesg in filter(None, mesgs):
+            if mesg[0] == cwiid.MESG_BTN:
+                if cwiid.BTN_B & mesg[1]:
+                    print "Start tracking!"
+                    wiimote.rpt_mode = cwiid.RPT_BTN ^ cwiid.RPT_IR
+                    #track[wm_id] = True
+                else:
+                    print "End tracking"
+                    wiimote.rpt_mode = cwiid.RPT_BTN
+                    #track[wm_id] = False
+            elif mesg[0] == cwiid.MESG_IR and track[wm_id]:
+                blobs = filter(None, mesg[1])
+                if blobs:
+                    pos_x = -2 * (blobs[0]["pos"][0] - 512) / 1024.
+                    pos_y = 2 * (blobs[0]["pos"][1] - 384) / 768.
+                    point[wiimote] = numpy.array((pos_x, pos_y))
+                    sock.send(GAVIEWER_MESG % {"x": pos_x, "y": pos_y})
     return x
 
 def connect_ga():
-    print "Start GAViewer. and type \"add_net_port(6860)\"."
-    s = socket.create_connection(("localhost", 6860))
-    return s
+    try:
+        return socket.create_connection(("localhost", 6860))
+    except:
+        raw_input("Start GAViewer. and type \"add_net_port(6860)\". Then, press enter in this window.")
+        return socket.create_connection(("localhost", 6860))
 
-s = connect_ga()
-w1, w2 = init(s)
+if __name__ == "__main__":
+    sock = connect_ga()
+    wms = init(sock)
+    exit = False
+    while not exit:
+        c = sys.stdin.read(1)
+        if c == 'q' or c == 'Q':
+            exit = True
+    for wm in wms:
+        wm.close()
