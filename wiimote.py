@@ -22,11 +22,6 @@ import atexit
 WIIMOTE_NOTAPE = '00:1E:35:0F:4B:E9'
 WIIMOTE_TAPE = "00:25:A0:B3:00:EB"
 
-def t():
-    wiimote = Wiimote(WIIMOTE_NOTAPE)
-    wiimote.led = 5
-    return wiimote
-
 def require(rpt_mode):
     def _require(callback_fn):
         callback_fn.require = rpt_mode
@@ -48,9 +43,11 @@ def callback_calibrate(controller):
         if not controller.is_calibrated():
             for mesg in mesgs: 
                 if mesg[0] == cwiid.MESG_BTN and mesg[1] & cwiid.BTN_HOME:
+                    rpt_mode = wiimote.rpt_mode
                     wiimote.rpt_mode ^= cwiid.RPT_IR
                     if controller.calibrate(wiimote.state['ir_src']):
                         return
+                    wiimote.rpt_mode = rpt_mode
     return _callback_calibrate
 
 @require(cwiid.RPT_BTN)
@@ -112,10 +109,10 @@ class Wiimote(object):
         self._pattern_rumble.terminate()
         self.__wiimote.close()
 
-    def register_callback(self, fn):
+    def register(self, fn):
         self._callback.register(fn)
 
-    def unregister_callback(self, fn_id):
+    def unregister(self, fn_id):
         self._callback.unregister(fn_id)
 
     def notify_callbacks(self):
@@ -157,3 +154,9 @@ class Wiimote(object):
     def rpt_mode(self, value):
         self._rpt_mode = value
         self.__wiimote.rpt_mode = self._rpt_mode
+
+
+
+if __name__ == "__main__":
+    wiimote = Wiimote(WIIMOTE_NOTAPE)
+    wiimote.led = 5
