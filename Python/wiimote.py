@@ -7,6 +7,7 @@ import collections
 import math
 import socket
 import sys
+import time
 
 WIIMOTE_TAPE = "00:25:A0:B3:00:EB"
 WIIMOTE_NOTAPE = "00:1E:35:0F:4B:E9"
@@ -15,19 +16,28 @@ points = collections.defaultdict(lambda: (None, None))
 sock = None
 wiimotes = []
 calibrated = []
+exit = False
 
-def start():
+def start(socket=None):
+    global exit
     global sock
     global wiimotes
-    sock = connect_ga()
+    exit = False
+    sock = socket
+    if sock is None:
+        sock = connect_ga()
     wiimotes = connect_wiimotes(sock)
 
 
 def stop():
+    global exit
     global sock
     global wiimotes
     for wiimote in wiimotes:
-        wiimote.close()
+        try:
+            wiimote.close()
+        except ValueError:
+            pass
     wiimotes = []
     if sock:
         sock.close()
@@ -36,8 +46,8 @@ def stop():
 atexit.register(stop)
 
 def main():
+    global exit
     start()
-    exit = False
     print "Typ \"q\" to quit."
     while not exit:
         c = sys.stdin.read(1)
@@ -72,7 +82,10 @@ def connect_wiimotes(sock, wiimote_count=-1):
     calibrated = wiimote_count * [bool()]
     for wiimote_id in range(wiimote_count):
         raw_input("Put Wii Remote #%d in discovery mode, and press enter. " % (wiimote_id + 1))
-        wiimote = cwiid.Wiimote()
+        if wiimote_count == 1:
+            wiimote = cwiid.Wiimote(WIIMOTE_NOTAPE)
+        else:
+            wiimote = cwiid.Wiimote()
         wiimote.led = wiimote_id + 1
         wiimote.rpt_mode = cwiid.RPT_BTN
         wiimote.enable(cwiid.FLAG_MESG_IFC)
@@ -88,14 +101,13 @@ def callback(wiimote_id, sock):
     global COLOR
     global wiimotes
 
-    GAVIEWER_MESG = "p%(id)d = %(color)s(%%(mesg)s)%%(displaymode)s$" \
-        % { "id": wiimote_id, "color": COLOR[wiimote_id % len(COLOR)]}
+    cmd = "%d %%s" % wiimote_id
+
+    def _send_socket(mesg):
+        return sock.send(cmd % mesg)
 
     def _send_socket(mesg, is_displayed=True):
-        formatting = {"mesg": mesg, "displaymode": ","}
-        if not is_displayed:
-            formatting["displaymode"] = ";"
-        return sock.send(GAVIEWER_MESG % formatting)
+        print mesg
 
     kwargs = {"wiimote_id": wiimote_id, 
             "send_socket": _send_socket}
@@ -125,28 +137,29 @@ radiansPerPixel = (math.pi / 4) / 1024 # 45 degree vield of view with a 124x768 
 movementScaling = 1.
 
 
-def callback_IR_default(mesg, timestamp, send_socket, wiimote_id=-1, **kwargs):
-    global points
-
-    blobs = filter(None, mesg[1])
-    if len(blobs) >= 2:
-        points[wiimote_id] = (numpy.array(blob[0]['pos']),
-                numpy.array(blob[1]['pos']))
-        point_pos = "c3ga_point(0.01 %(x).3f e1 - 0.01 %(y).3f e2)"
-        send_socket(" ^ ".join([point_pos % {"x": p[0], "y": p[1]}\
-                for p in points[wiimote_id]]))
-
-
-def callback_BTN_default(mesg, timestamp, **kwargs):
-    pass
+#def callback_IR_default(mesg, timestamp, send_socket, wiimote_id=-1, **kwargs):
+#    global points
+#
+#    blobs = filter(None, mesg[1])
+#    if len(blobs) >= 2:
+#        points[wiimote_id] = (numpy.array(blob[0]['pos']),
+#                numpy.array(blob[1]['pos']))
+#        point_pos = "c3ga_point(0.01 %(x).3f e1 - 0.01 %(y).3f e2)"
+#        send_socket(" ^ ".join([point_pos % {"x": p[0], "y": p[1]}\
+#                for p in points[wiimote_id]]))
+#
+#
+#def callback_BTN_default(mesg, timestamp, **kwargs):
+#    pass
 
 def callback_track_BTN(mesg, timestamp, send_socket=None, wiimote_id=-1, **kwargs):
+    global exit
     global calibrated
     global angle
     global cameraIsAboveScreen
     global cameraVerticalAngle, relativeVerticalAngle
 
-    if not calibrated[wiimote_id] and cwiid.BTN_A & mesg[1]:
+    if cwiid.BTN_HOME & mesg[1]:
         # angle of head to screen
         angle = math.acos(.5 / headDist) - math.pi / 2
         if not cameraIsAboveScreen:
@@ -154,6 +167,8 @@ def callback_track_BTN(mesg, timestamp, send_socket=None, wiimote_id=-1, **kwarg
         cameraVerticalAngle = angle - relativeVerticalAngle
         calibrated[wiimote_id] = True
         print "Calibrated"
+    elif (cwiid.BTN_1 | cwiid.BTN_2) & mesg[1]:
+        exit = True
 
 def callback_track_IR(mesg, timestamp, send_socket=None, wiimote_id=-1, **kwargs):
     global calibrated
@@ -191,7 +206,7 @@ def callback_track_IR(mesg, timestamp, send_socket=None, wiimote_id=-1, **kwargs
         else:
             headY -= 0.5
 
-        send_socket("%.3f e1 + %.3f e2 + %.3f e3" % (headX, headY, headDist))
+        send_socket("%.4f %.4f %.4f" % (headX, headY, headDist))
 
 #callback_IR = callback_IR_default
 #callback_BTN = callback_BTN_default

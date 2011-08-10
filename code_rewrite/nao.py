@@ -8,16 +8,24 @@ import toolkit
 try:
     import naoqi
 except ImportError:
-    import dummy_naoqi as naoqi
+    import remote_naoqi
+    naoqi = remote_naoqi.Client(toolkit.settings['REMOTE_NAOQI_HOST'],
+            toolkit.settings['REMOTE_NAOQI_PORT'])
 import operator
 
 robot = None
 
-def connect():
-    global robot
+POSITION_OKAY = 1
+POSITION_OUT_OF_REACH = 2
+POSITION_OUT_OF_CONFINES = 4
+POSITION_OCCUPIED = 8
 
-    start()
+def get_instance():
+    robot = NAO(toolkit.settings['NAOQI_HOST'], toolkit.settings['NAOQI_PORT'])
+    robot.connect()
+    robot.init_position()
     return robot
+
 
 def start():
     """
@@ -37,7 +45,6 @@ def start():
     return robot
 
 
-
 def stop():
     """
     Disconnect from the NAO robot.
@@ -52,15 +59,6 @@ def stop():
     robot.close_connections()
     robot = None
     toolkit.verbose("Disconnecting succesful!")
-
-
-def get_kchains():
-    global robot
-    try:
-        return robot.available_kinematic_chains
-    except AttributeError:
-        raise RuntimeError("Module '%s' needs to be started first." %
-                __name__)
 
 
 @toolkit.untested
@@ -181,6 +179,37 @@ class NAO(object):
         for kchain in self.__kinematic_chains:
             self.end_effector[kchain] = end_effector(kchain)
 
+    def get_limbs(self):
+        """
+        Return the names of all human-controllable kinematic chains.
+        """
+        return self.available_kinematic_chains
+
+    def terminate(self):
+        """
+        For a common stopping interface among my modules.
+        """
+        return self.close_connections()
+
+    @toolkit.dummy
+    def position_state(self, kchain, target):
+        """
+        Check if you can move to that area. Return value is a bitmask,
+        combined of these values:
+
+        - POSITION_OKAY              when it is okay to move to target
+        - POSITION_OUT_OF_REACH      when the kinematic chain can't reach the
+                                     target
+        - POSITION_OUT_OF_CONFINES   when the target is outside of the
+                                     limiting area (LaserScannerPlane)
+        - POSITION_OCCUPIED          when the laser scanner says it's occupied
+
+        NOTE: POSITION_OKAY does not indicate that the kinematic chain will
+        not collide with its own body.
+        """
+        return_v = 0
+        return POSITION_OKAY
+
     @toolkit.untested
     def is_connected(self):
         return all(req_proxy in self.proxies\
@@ -208,7 +237,7 @@ class NAO(object):
 
 
 EndEffector = collections.namedtuple('EndEffector',\
-        ['position', 'orientation']))
+        ['position', 'orientation'])
 
 def end_efector(*args):
     if len(args) == 1:
