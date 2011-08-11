@@ -1,0 +1,45 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{color}
+\usepackage{eufrak} % Enables \mathfrak
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{cleveref}
+%\usepackage[overload]{textcase}
+%\newcommand{\Autoref}[1]{\expandafter\MakeTextUppercase\autoref#1}
+
+\definecolor{nicered}{rgb}{0.6, 0.0, 0.24}
+\definecolor{nicegreen}{rgb}{0.0, 0.5, 0.24}
+\definecolor{niceblue}{rgb}{0.0, 0.28, 0.74}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=nicegreen,
+  linkcolor=niceblue,
+  citecolor=nicered,
+}
+
+
+\title{Presenting haptic feedback to an operator of a humanoid robot}
+\author{Patrick M. de Kok}
+
+\begin{document}
+\input{frontpage}
+\input{abstract}
+\tableofcontents
+\input{introduction}
+\input{theory}
+\input{approach}
+\input{results}
+\input{conclusion}
+\input{discussion}
+\appendix
+%\input{fabrik}
+
+\bibliographystyle{alpha}
+\bibliography{studybooks,literature}
+
+\end{document}
