@@ -1,10 +1,39 @@
 \section{Theory}
 \label{theory}
 
-In this section, we will h
+This section gives a short introduction to a mathematical framework for robot movement.  Before this can be done, some common concepts in robotics need to be introduced.  A basic understanding of linear algebra is assumed.
+
 
 \subsection{Robotics}
 \label{theory/robotics}
+Robots are physical agents that performs tasks by manipulating the physical world \cite[p.901]{Russel2003}.  A robot's body consists of \emph{links}\index{link} which are connected with each other through \emph{joints}\index{joint}.  For the discussion in this document it is assumed that all links are \emph{rigid bodies}\index{rigid body}; physical objects that cannot be deformed.  A link's position can change with respect to another link through change in its joint.  It can either revolve around a point, or it can be moved some distance.  Joints that enable the first type of change are called \emph{revolute}\index{joint!revolute}, the second class is called a \emph{prismatic joint}\index{joint!prismatic}.  We count 1 \emph{degree of freedom}\index{degree of freedom} (DOF\index{DOF}) for each transformation a joint can exercise on a link.  Joints with a DOF greater than 1 are said to be composite, and can be represented by multiple joints that are connected to each other by links with no length.  
+
+Links are thus connected to other links by joints.  When seen as a single object, an uninterrupted chain of links and joints is called a \emph{kinematic chain}\index{kinematic chain}.  Kinematic chains can be \emph{closed}\index{kinematic chain!closed}; it can contain a loop, where a link is connected to another link that is already in the chain.  When there are no loops, the kinematic chain is said to be \emph{open}\index{kinematic chain!open}.
+
+Because of its links and joints, the robot can affect the world.  The parts of its body that do so, are called \emph{effectors}\index{effector}.  The parts at the very end of an (open) kinematic chain are called \emph{end effectors}\index{effector!end}.
+
+\comment{Links hebben een co\"ordinatenstelsel, niet joints toch?}
+
+For some problems it is more convenient to know where an object is relative to a link, than knowing where the link and the object are relative to the origin of the world coordinate system.  For this convenience, one may define a \emph{frame}\index{frame}, or basis, $\C{B}_i$ for each link $l_i$.  The basis is usually orthogonal.  The origin of the basis is defined relative to its corresponding link.  We will use $[\V{p}]_{\C{B}}$ to denote a vector that represents a point $p$ in the basis $\C{B}$.  As a shorthand for $[\V{p}]_\C{W}$, a vector representing a point $p$ in the basis of the world, we write $\V{p}$.
+
+As rigid bodies cannot be deformed, they can only undergo operations that are \emph{isometric}\index{isometry}.  A transformation $\T{A}$ is said to be isometric when it preserves the distance between vectors: \[ \forall \V{x}, \V{y} \in \mathbb{R}^n: \V{x} \cdot \V{y} = \T{A}\V{x} \cdot \T{A}\V{y}.\]  Each isometry in a Euclidean space can be decomposed by a rotation (or a special orthogonal transformation), a translation and a reflection.  As a physical object cannot reflect its body in the real world, we will not further discuss those isometries that reflect points in a certain plane.
+
+\TODO{Decompositiestelling kort behandelen}
+
+\TODO{Transformatie in kleine stapjes toepassen $\to$ geen reflectie!}
+
+\TODO{Stelling ``2 spiegelingen maken 1 rotatie'' bespreken}
+
+\TODO{Denavit-Hartenberg bespreken!}
+
+\comment{Verhaal verduidelijken aan de hand van een plaatje?}
+
 
 \subsection{Forward and inverse kinematics}
 \label{theory/kinematics}
+
+Forward and inverse kinematics form a framework for working with robot joint configurations and their positions.  This discussion assumes all kinematic chains to be open.
+
+Forward kinematics is used to compute the position and orientation of a link with respect to some basis $\C{B}$, given the configuration of the joints in the kinematic chain.
+
+Each link $l_i$ in the kinematic chain has its own coordinate system $\C{B}_i$. One can express a position  $[\V{p}]_{\C{B}_i}$ given in a certain coordinate system $\C{B}_i$, in a different coordinate system $\C{B}_j$, when the isometric transformation between $\C{B}_i$ and $\C{B}_j$ is known.  As shown before, a isometric transformation can be decomposed into a rotation, translation and reflection.  

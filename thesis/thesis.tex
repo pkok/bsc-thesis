@@ -5,11 +5,10 @@
 \usepackage[english]{babel}
 \usepackage{color}
 \usepackage{eufrak} % Enables \mathfrak
-\usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{sectsty}
 \usepackage{cleveref}
-%\usepackage[overload]{textcase}
-%\newcommand{\Autoref}[1]{\expandafter\MakeTextUppercase\autoref#1}
 
 \definecolor{nicered}{rgb}{0.6, 0.0, 0.24}
 \definecolor{nicegreen}{rgb}{0.0, 0.5, 0.24}
@@ -22,9 +21,18 @@
   citecolor=nicered,
 }
 
+\allsectionsfont{\color{niceblue}}
+
+\newcommand{\comment}[1]{\colorbox{red}{\bfseries\color{white}#1}}
+\newcommand{\TODO}[1]{\colorbox{niceblue}{\bfseries\color{white}TODO: #1}}
+\newcommand{\C}[1]{\ensuremath\mathfrak{#1}} % Typesetting sets (and coordinate systems)
+\newcommand{\T}[1]{\ensuremath\mathtt{#1}} % Typesetting general transformations
+\newcommand{\V}[1]{\ensuremath\mathbf{#1}} % Typesetting vectors
+\newcommand{\norm}[1]{\ensuremath\left\|#1\right\|}
+
 
 \title{Presenting haptic feedback to an operator of a humanoid robot}
-\author{Patrick M. de Kok}
+\author{Patrick M.~de Kok}
 
 \begin{document}
 \input{frontpage}
