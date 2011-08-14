@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from threads import WiimoteCallback as Callback, PatternRumbler
 import trackers
+import toolkit
 
 import cwiid
 
@@ -69,11 +70,13 @@ def callback_trigger_tracking(wiimote, timestamp, mesgs):
 
 
 class Wiimote(object):
+    IR_X_MAX = cwiid.IR_X_MAX
+    IR_Y_MAX = cwiid.IR_Y_MAX
     @property
     def w(self):
         return self.__wiimote
 
-    def __init__(self, bdaddr=None, led=0, rpt_mode=0, tracker_cls=PositionTracker):
+    def __init__(self, bdaddr=None, led=0, rpt_mode=0, tracker_cls=trackers.PositionTracker):
         if bdaddr is None:
             self.__wiimote = cwiid.Wiimote()
         else:

@@ -34,7 +34,7 @@ class PositionTracker(object):
     def calibrate(self, points):
         if not self.is_calibrated():
             angle = math.acos(0.5 / self.position[2]) - math.pi / 2
-            if self.beacon_low
+            if self.beacon_low:
                 angle *= -1
             self.vertical_angle = angle - self.relativeVerticalAngle
             self.calibrated = True
